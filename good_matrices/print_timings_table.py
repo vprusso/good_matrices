@@ -1,8 +1,8 @@
+import os
 import sys
-import os.path
 
 if len(sys.argv) < 2:
-	print "need order (or min and max order) of timings to print"
+	print("Need order (or min and max order) of timings to print")
 	quit()
 
 n1 = int(sys.argv[1])
@@ -13,33 +13,22 @@ else:
 
 def printalign(w, s):
 	if isinstance(s, float):
-		print str("%.2f" % s) + " "*(w-len(str("%.2f" % s))),
+		print(str("%.2f" % s) + " "*(w-len(str("%.2f" % s))),)
 	else:
-		print str(s) + " "*(w-len(str(s))),
+		print(str(s) + " "*(w-len(str(s))),)
 
 printalign(10, "case")
-#printalign(1, "&")
 printalign(10, "gen comps")
-#printalign(1, "&")
 printalign(10, "gen pairs")
-#printalign(1, "&")
 printalign(10, "sort")
-#printalign(1, "&")
 printalign(10, "join")
-#printalign(1, "&")
 printalign(10, "remequiv")
-#printalign(1, "&")
 printalign(10, "solve")
-#printalign(1, "&")
 printalign(10, "tally")
-#printalign(1, "&")
 printalign(10, "TOTAL (h)")
-#printalign(1, "&")
 printalign(10, "numinsts")
-#printalign(1, "&")
 printalign(10, "numsols")
-#printalign(1, "\\\\")
-print ""
+print("")
 
 totalgentime = 0
 
@@ -166,27 +155,14 @@ for n in range(n1, n2+1, orderdiff):
 	totaltime += equivexhausttime
 
 	printalign(10, n)
-	#printalign(1, "&")
 	printalign(10, gentime)
-	#printalign(1, "&")
 	printalign(10, genpairtime)
-	#printalign(1, "&")
 	printalign(10, sorttime)
-	#printalign(1, "&")
 	printalign(10, jointime)
-	#printalign(1, "&")
 	printalign(10, equivpairstime)
-	#printalign(1, "&")
 	printalign(10, solvetime)
-	#printalign(1, "&")
 	printalign(10, equivexhausttime)
-	#printalign(1, "&")
 	printalign(10, totaltime/float(60*60))
-	#printalign(1, "&")
 	printalign(10, numinsts)
-	#printalign(1, "&")
 	printalign(10, numsols)
-	#printalign(1, "\\\\")
-	print ""
-
-#print "Total gen time: {0}".format(totalgentime)
+	print("")

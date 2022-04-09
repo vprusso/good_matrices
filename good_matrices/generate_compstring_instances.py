@@ -1,16 +1,19 @@
 import sys, os.path
-from subprocess32 import call
 
 if len(sys.argv) < 2:
-	print "need order of cases to generate"
+	print("need order of cases to generate")
 	quit()
 
 n = int(sys.argv[1])
 
 inname = "input/compstring/%d.in"
+input_dir = "input"
+input_compstring_dir = os.path.join(input_dir, "compstring")
 
-if not os.path.exists("input"): call(["mkdir", "input"])
-if not os.path.exists("input/compstring"): call(["mkdir", "input/compstring"])
+if not os.path.exists(input_dir): 
+	os.makedirs(input_dir)
+if not os.path.exists(input_compstring_dir): 
+	os.makedirs(input_compstring_dir)
 
 def minindex(i):
 	if 2*i <= n:
@@ -28,16 +31,16 @@ def xor_clauses_1(X, c):
 	Y = [-1 for i in range(n)]
 	num_ones = 0
 	k = n-1
-	while(k >= 0):
-		if (num_ones%2 == 0 and c == -1) or (num_ones%2 == 1 and c == 1):
+	while k >= 0:
+		if (num_ones % 2 == 0 and c == -1) or (num_ones % 2 == 1 and c == 1):
 			s = ""
 			for i in range(n):
 				s += "{0} ".format(X[i]*Y[i])
 			s += "0"
 			cl.append(s)
 
-		k = n-1
-		while(k >= 0):
+		k = n - 1
+		while k >= 0:
 			Y[k] *= -1
 			if Y[k] == 1:
 				num_ones += 1
@@ -45,10 +48,10 @@ def xor_clauses_1(X, c):
 			num_ones -= 1
 			k -= 1
 
-numvars = 4*(n/2)+4
+numvars = 4 * (n/2) + 4
 
-# Alternative encoding of xor_clauses from above
-# The encoding uses 4*(n-1) clauses and n-1 new variables
+# Alternative encoding of xor_clauses from above The encoding uses 4*(n-1)
+# clauses and n-1 new variables.
 def xor_clauses_2(X, c):
 	global numvars
 	n = len(X)
@@ -76,7 +79,7 @@ def xor_clauses(X, c):
 
 indices = [0*(n/2+1)+1, 1*(n/2+1)+1, 2*(n/2+1)+1, 3*(n/2+1)+1]
 
-if n%2 == 1:
+if n % 2 == 1:
 	for j in range(1,n/2+1):
 		if 4*j < n:
 			xor_clauses([indices[0]+minindex(2*j), indices[0]+j, indices[1]+j, indices[2]+j, indices[3]+j], -1)

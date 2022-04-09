@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "good_matrices"
+version = "0.1.0"
+description = ""
+authors = ["vprusso <vincentrusso1@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.11"
+numpy = "^1.21"
+scipy = "^1.8.0"
+matplotlib = "^3.5.1"
+colorama = "^0.4.4"
+joblib = "^1.1.0"
+tqdm = "^4.62.3"
+numba = "^0.55.1"
+seaborn = "^0.11.2"
+networkx = "^2.7.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^4.6"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

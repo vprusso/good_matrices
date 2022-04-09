@@ -31,5 +31,5 @@ else
 		python2 solve_compstring_instances.py $n
 		./remove_equivalent_exhaust $n
 	done
-	python2 print_timings_table.py $1 $u
+	python print_timings_table.py $1 $u
 fi
