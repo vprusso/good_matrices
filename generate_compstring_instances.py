@@ -1,4 +1,5 @@
-import sys, os.path
+import os
+import sys
 
 if len(sys.argv) < 2:
 	print("need order of cases to generate")
