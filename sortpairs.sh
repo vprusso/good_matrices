@@ -35,21 +35,20 @@ do
 	then
 		continue
 	fi
-	if [ -e matchings/$n.$c.$l.AB.pafs.txt ]
-	then
-		START=$(date +%s.%N)
-		sort -T tmp/ matchings/$n.$c.$l.AB.pafs.txt > matchings/$n.$c.$l.AB.pafs.sorted.txt
-		END=$(date +%s.%N)
-		DIFF=$(echo "$END - $START" | bc)
-		printf "  Case $c: AB PAFs sorted in %.2f seconds\n" $DIFF
-		echo $DIFF > timings/$n.$c.$l.AB.sorttime
-	fi
+ 	if [ -e matchings/$n.$c.$l.AB.pafs.txt ]
+ 	then
+	 	SECONDS=0
+ 		echo "ORDER $n: Sort compression $c: Sort pairs"
+ 		sort -T tmp/ matchings/$n.$c.$l.AB.pafs.txt > matchings/$n.$c.$l.AB.pafs.sorted.txt
+		DIFF=$SECONDS
+ 		printf "  Case $c: AB PAFs sorted in %.2f seconds\n" $DIFF
+ 		echo $DIFF > timings/$n.$c.$l.AB.sorttime
+ 	fi
 	if [ -e matchings/$n.$c.$l.CD.pafs.txt ]
 	then
-		START=$(date +%s.%N)
+		SECONDS=0
 		sort -T tmp/ matchings/$n.$c.$l.CD.pafs.txt > matchings/$n.$c.$l.CD.pafs.sorted.txt
-		END=$(date +%s.%N)
-		DIFF=$(echo "$END - $START" | bc)
+		DIFF=$SECONDS
 		printf "  Case $c: CD PAFs sorted in %.2f seconds\n" $DIFF
 		echo $DIFF > timings/$n.$c.$l.CD.sorttime
 	fi

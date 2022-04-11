@@ -49,7 +49,7 @@ def xor_clauses_1(X, c):
 			num_ones -= 1
 			k -= 1
 
-numvars = 4 * (n/2) + 4
+numvars = 4 * (n//2) + 4
 
 # Alternative encoding of xor_clauses from above The encoding uses 4*(n-1)
 # clauses and n-1 new variables.
@@ -78,18 +78,18 @@ def xor_clauses(X, c):
 	else:
 		xor_clauses_2(X, c)
 
-indices = [0*(n/2+1)+1, 1*(n/2+1)+1, 2*(n/2+1)+1, 3*(n/2+1)+1]
+indices = [0*(n//2+1)+1, 1*(n/2+1)+1, 2*(n//2+1)+1, 3*(n//2+1)+1]
 
 if n % 2 == 1:
-	for j in range(1,n/2+1):
+	for j in range(1,n//2+1):
 		if 4*j < n:
 			xor_clauses([indices[0]+minindex(2*j), indices[0]+j, indices[1]+j, indices[2]+j, indices[3]+j], -1)
-		elif n%3 == 0 and j == n/3:
+		elif n%3 == 0 and j == n//3:
 			xor_clauses([indices[1]+j, indices[2]+j, indices[3]+j], 1)
 		else:
 			xor_clauses([indices[0]+minindex(2*j), indices[0]+j, indices[1]+j, indices[2]+j, indices[3]+j], 1)
 else:
-	cl.append("{0} -{0} 0".format(4*(n/2)+4))
+	cl.append("{0} -{0} 0".format(4*(n//2)+4))
 
 # Enforce that first entries are positive
 cl.append("{0} 0".format(indices[0]))
