@@ -14,10 +14,6 @@ else
 	then
 		echo "Order must be odd"
 		exit
-	elif [ $((u%3)) -ne 0 ]
-	then
-		echo "Order must be divisible by 3"
-		exit
 	fi
 	make all
 	for n in `seq $1 6 $u`
@@ -27,9 +23,6 @@ else
 		./sortpairs.sh $n
 		./join_pairedmatchings $n
 		./remove_equivalent_matchedpairs $n
-		python generate_compstring_instances.py $n
-		python solve_compstring_instances.py $n
-		./remove_equivalent_exhaust $n
 	done
 	python print_timings_table.py $1 $u
 fi

@@ -9,24 +9,7 @@ then
 fi
 export LC_ALL=C
 n=$1
-if [ -n "$3" ]
-then
-	d=$3
-elif [ $((n % 2)) -eq 0 ]
-then
-	d=2
-elif [ $((n % 3)) -eq 0 ]
-then
-	d=3
-elif [ $((n % 5)) -eq 0 ]
-then
-	d=5
-elif [ $((n % 7)) -eq 0 ]
-then
-	d=7
-else
-	d=1
-fi
+d=1
 l=$((n/d))
 echo "ORDER $n: Sort compression pairs"
 for c in `seq 0 4`

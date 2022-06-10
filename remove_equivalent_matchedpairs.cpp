@@ -90,22 +90,7 @@ int main(int argc, char** argv)
 	{	casetosolve = atoi(argv[2]);
 	}
 
-	int d;
-	if(argc>3)
-	{	d = atoi(argv[3]);
-	}
-	else
-	{	if(n%2 == 0)
-			d = 2;
-		else if(n%3 == 0)
-			d = 3;
-		else if(n%5 == 0)
-			d = 5;
-		else if(n%7 == 0)
-			d = 7;
-		else
-			d = 1;
-	}
+	int d = 1;
 	const int l = n/d;
 
 	int result;
