@@ -1,3 +1,10 @@
+# Ignore executable files
+generate_matching_instances_comp
+generate_pairedmatchings
+join_pairedmatchings
+remove_equivalent_exhaust
+remove_equivalent_matchedpairs
+
 # Ignore data
 exhaust/*
 input/*
