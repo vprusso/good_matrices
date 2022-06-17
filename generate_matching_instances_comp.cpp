@@ -62,7 +62,6 @@ int main(int argc, char** argv) {
 
 	const int n = atoi(argv[1]);
 
-	// Vincent: Setting compression factor to 1.
 	int d = 1;
 	const int l = n/d;
 

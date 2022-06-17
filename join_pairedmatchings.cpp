@@ -6,8 +6,7 @@
 #include <sys/stat.h>
 #include "decomps.h"
 
-int main(int argc, char** argv) 
-{
+int main(int argc, char** argv) {
 	char filename[100];
 
 	if(argc==1)
@@ -16,9 +15,8 @@ int main(int argc, char** argv)
 	const int n = atoi(argv[1]);
 
 	int casetosolve = -1;
-	if(argc>2)
-	{	casetosolve = atoi(argv[2]);
-	}
+	if (argc > 2)
+		casetosolve = atoi(argv[2]);
 
 	int d = 1;
 	const int l = n/d;
@@ -40,8 +38,7 @@ int main(int argc, char** argv)
 		Aseqns.push_back(str);
 	file.close();
 
-	for(int c = 0; c < decomps_len[n]; c++)
-	{
+	for(int c = 0; c < decomps_len[n]; c++) {
 		if(casetosolve != -1 && casetosolve != c)
 			continue;
 
@@ -82,8 +79,8 @@ int main(int argc, char** argv)
 		int seqncount = 0;
 		bool ABend = false, CDend = false;
 
-		if(std::getline(ABfile, str))
-		{	colonind = str.find_first_of(":");
+		if(std::getline(ABfile, str)) {	
+			colonind = str.find_first_of(":");
 			ABind1 = std::stoi(str.substr(colonind+2), &sz);
 			ABind2 = std::stoi(str.substr(colonind+2+sz));
 			ABstr = str.substr(0, colonind);
@@ -91,8 +88,8 @@ int main(int argc, char** argv)
 		else
 			ABend = CDend = true;
 
-		if(std::getline(CDfile, str))
-		{	colonind = str.find_first_of(":");
+		if(std::getline(CDfile, str)) {	
+			colonind = str.find_first_of(":");
 			CDind1 = std::stoi(str.substr(colonind+2), &sz);
 			CDind2 = std::stoi(str.substr(colonind+2+sz));
 			CDstr = str.substr(0, colonind);
@@ -103,71 +100,66 @@ int main(int argc, char** argv)
 		sprintf(filename, matchedfilename, n, c, l);
 		outfile.open(filename);
 
-		while(!(ABend && CDend))
-		{	if(ABstr == CDstr)
-			{	//std::cout << ABstr << "= " << CDstr << '\n';
+		while(!(ABend && CDend)) {	
+			if(ABstr == CDstr) {
 				std::string eqstr = ABstr;
-				while(ABstr == eqstr)
-				{	
+				while(ABstr == eqstr) {	
 					ABseqns.push_back(Aseqns[ABind1]+Bseqns[ABind2]);
-					if(std::getline(ABfile, str))
-					{	colonind = str.find_first_of(":");
+					if(std::getline(ABfile, str)) {	
+						colonind = str.find_first_of(":");
 						ABind1 = std::stoi(str.substr(colonind+2), &sz);
 						ABind2 = std::stoi(str.substr(colonind+2+sz));
 						ABstr = str.substr(0, colonind);
 					}
-					else
-					{	ABend = true;
+					else {	
+						ABend = true;
 						break;
 					}
 				}
-				while(CDstr == eqstr)
-				{	
+				while(CDstr == eqstr) {	
 					CDseqns.push_back(Cseqns[CDind1]+Dseqns[CDind2]);
-					if(std::getline(CDfile, str))
-					{	colonind = str.find_first_of(":");
+					if(std::getline(CDfile, str)) {	
+						colonind = str.find_first_of(":");
 						CDind1 = std::stoi(str.substr(colonind+2), &sz);
 						CDind2 = std::stoi(str.substr(colonind+2+sz));
 						CDstr = str.substr(0, colonind);
 					}
-					else
-					{	CDend = true;
+					else {	
+						CDend = true;
 						break;
 					}
 				}
 
 				for(int i=0; i<CDseqns.size(); i++)
-					for(int j=0; j<ABseqns.size(); j++)
-					{	outfile << ABseqns[j] << CDseqns[i] << '\n';
+					for(int j=0; j<ABseqns.size(); j++) {	
+						outfile << ABseqns[j] << CDseqns[i] << '\n';
 						seqncount++;
 					}
 
 				ABseqns.clear();
 				CDseqns.clear();
 			}
-			else if(ABstr < CDstr)
-			{	//std::cout << ABstr << "< " << CDstr << '\n';
-				if(std::getline(ABfile, str))
-				{	colonind = str.find_first_of(":");
+			else if(ABstr < CDstr) {	
+				if(std::getline(ABfile, str)) {	
+					colonind = str.find_first_of(":");
 					ABind1 = std::stoi(str.substr(colonind+2), &sz);
 					ABind2 = std::stoi(str.substr(colonind+2+sz));
 					ABstr = str.substr(0, colonind);
 				}
-				else
-				{	ABend = true;
+				else {	
+					ABend = true;
 					break;
 				}
 			}
-			else
-			{	//std::cout << ABstr << "> " << CDstr << '\n';
-				if(std::getline(CDfile, str))
-				{	colonind = str.find_first_of(":");
+			else {
+				if(std::getline(CDfile, str)) {	
+					colonind = str.find_first_of(":");
 					CDind1 = std::stoi(str.substr(colonind+2), &sz);
 					CDind2 = std::stoi(str.substr(colonind+2+sz));
 					CDstr = str.substr(0, colonind);
 				}
-				else
-				{	CDend = true;
+				else {	
+					CDend = true;
 					break;
 				}
 			}
@@ -183,7 +175,5 @@ int main(int argc, char** argv)
 		fclose(f);
 
 		printf("  Case %d: %d matched sequence pairs of length %d generated in %.2f seconds\n", c, seqncount, l, (clock() - start)/(float)CLOCKS_PER_SEC);
-
 	}
-
 }

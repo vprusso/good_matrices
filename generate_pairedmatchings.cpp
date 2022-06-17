@@ -17,22 +17,21 @@ const int HALF_MAX_N = 1+MAX_N/2;
 #include <array>
 #include <vector>
 
-void fprintpair(FILE* f, int n, int* A, int iA, int iB)
-{	for(int i=0; i<n; i++)
+void fprintpair(FILE* f, int n, int* A, int iA, int iB) {	
+	for(int i=0; i<n; i++)
 		fprintf(f, "%d ", A[i]);
 	fprintf(f, ": %d %d\n", iA, iB);
 }
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
 	if(argc==1)
 		fprintf(stderr, "Need order of paired matchings files to compute\n"), exit(0);
 
 	const int n = atoi(argv[1]);
 
 	int casetosolve = -1;
-	if(argc>2)
-	{	casetosolve = atoi(argv[2]);
+	if(argc > 2) {	
+		casetosolve = atoi(argv[2]);
 	}
 
 	int d = 1;
@@ -70,19 +69,11 @@ int main(int argc, char** argv)
 	sprintf(filename, seqnsfilename, n, 0, l, "A");
 	seqnsfile = fopen(filename, "r");
 	i = 0;
-	while(fscanf(seqnsfile, "%d ", &in)>0)
-	{	X[i] = in;
+	while(fscanf(seqnsfile, "%d ", &in)>0) {	
+		X[i] = in;
 		i++;
-		if(i%l==0)
-		{	i = 0;
-			#if NUMSPLITS > 1
-			if(splitcount%NUMSPLITS!=splitcase)
-			{	splitcount++;
-				continue;
-			}
-			splitcount++;
-			#endif
-
+		if (i % l == 0) {	
+			i = 0;
 			for(int j=0; j<l; j++)
 				fft_signal[j] = X[j];
 			fftw_execute(plan);
@@ -99,18 +90,11 @@ int main(int argc, char** argv)
 	sprintf(filename, pafsfilename, n, 0, l, "A");
 	pafsfile = fopen(filename, "r");
 	i = 0;
-	while(fscanf(pafsfile, "%d ", &in)>0)
-	{	P[i] = in;
+	while(fscanf(pafsfile, "%d ", &in) > 0) {	
+		P[i] = in;
 		i++;
-		if(i%pafslen==0)
-		{	i = 0;
-			#if NUMSPLITS > 1
-			if(splitcount%NUMSPLITS!=splitcase)
-			{	splitcount++;
-				continue;
-			}
-			splitcount++;
-			#endif
+		if(i%pafslen==0) {	
+			i = 0;
 			Apafs.push_back(P);
 		}
 	}
@@ -118,8 +102,7 @@ int main(int argc, char** argv)
 	printf("  Computed A PSDs in %.2f seconds\n", (clock() - start)/(float)CLOCKS_PER_SEC);
 	#endif
 
-	for(int c = 0; c < decomps_len[n]; c++)
-	{
+	for(int c = 0; c < decomps_len[n]; c++) {
 		if(casetosolve != -1 && casetosolve != c)
 			continue;
 			
@@ -141,19 +124,18 @@ int main(int argc, char** argv)
 		sprintf(filename, seqnsfilename, n, c, l, "B");
 		seqnsfile = fopen(filename, "r");
 		i = 0;
-		while(fscanf(seqnsfile, "%d ", &in)>0)
-		{	X[i] = in;
+		while(fscanf(seqnsfile, "%d ", &in)>0) {	
+			X[i] = in;
 			i++;
-			if(i%l==0)
-			{	i = 0;
+			if ( i % l == 0) {	
+				i = 0;
 
 				for(int j=0; j<l; j++)
 					fft_signal[j] = X[j];
 				fftw_execute(plan);
 				for(int j=1; j<=l/2; j++)
-				{	psds[j] = fft_result[j][0]*fft_result[j][0];
-				}
-
+					psds[j] = fft_result[j][0]*fft_result[j][0];
+				
 				Bseqns.push_back(X);
 				Bpsdslist.push_back(psds);
 			}
@@ -163,11 +145,11 @@ int main(int argc, char** argv)
 		sprintf(filename, pafsfilename, n, c, l, "B");
 		pafsfile = fopen(filename, "r");
 		i = 0;
-		while(fscanf(pafsfile, "%d ", &in)>0)
-		{	P[i] = in;
+		while(fscanf(pafsfile, "%d ", &in)>0) {	
+			P[i] = in;
 			i++;
-			if(i%pafslen==0)
-			{	i = 0;
+			if(i%pafslen==0) {	
+				i = 0;
 				Bpafs.push_back(P);
 			}
 		}
@@ -178,18 +160,16 @@ int main(int argc, char** argv)
 		sprintf(filename, seqnsfilename, n, c, l, "C");
 		seqnsfile = fopen(filename, "r");
 		i = 0;
-		while(fscanf(seqnsfile, "%d ", &in)>0)
-		{	X[i] = in;
+		while(fscanf(seqnsfile, "%d ", &in)>0) {	
+			X[i] = in;
 			i++;
-			if(i%l==0)
-			{	i = 0;
-
+			if(i%l==0) {	
+				i = 0;
 				for(int j=0; j<l; j++)
 					fft_signal[j] = X[j];
 				fftw_execute(plan);
 				for(int j=1; j<=l/2; j++)
-				{	psds[j] = fft_result[j][0]*fft_result[j][0];
-				}
+					psds[j] = fft_result[j][0]*fft_result[j][0];
 
 				Cseqns.push_back(X);
 				Cpsdslist.push_back(psds);
@@ -200,11 +180,11 @@ int main(int argc, char** argv)
 		sprintf(filename, pafsfilename, n, c, l, "C");
 		pafsfile = fopen(filename, "r");
 		i = 0;
-		while(fscanf(pafsfile, "%d ", &in)>0)
-		{	P[i] = in;
+		while(fscanf(pafsfile, "%d ", &in)>0) {	
+			P[i] = in;
 			i++;
-			if(i%pafslen==0)
-			{	i = 0;
+			if ( i % pafslen == 0) {	
+				i = 0;
 				Cpafs.push_back(P);
 			}
 		}
@@ -213,19 +193,17 @@ int main(int argc, char** argv)
 		sprintf(filename, seqnsfilename, n, c, l, "D");
 		seqnsfile = fopen(filename, "r");
 		i = 0;
-		while(fscanf(seqnsfile, "%d ", &in)>0)
-		{	X[i] = in;
+		while(fscanf(seqnsfile, "%d ", &in)>0) {	
+			X[i] = in;
 			i++;
-			if(i%l==0)
-			{	i = 0;
-
+			if ( i % l == 0) {	
+				i = 0;
 				for(int j=0; j<l; j++)
 					fft_signal[j] = X[j];
 				fftw_execute(plan);
 				for(int j=1; j<=l/2; j++)
-				{	psds[j] = fft_result[j][0]*fft_result[j][0];
-				}
-
+					psds[j] = fft_result[j][0]*fft_result[j][0];
+				
 				Dseqns.push_back(X);
 				Dpsdslist.push_back(psds);
 			}
@@ -235,11 +213,11 @@ int main(int argc, char** argv)
 		sprintf(filename, pafsfilename, n, c, l, "D");
 		pafsfile = fopen(filename, "r");
 		i = 0;
-		while(fscanf(pafsfile, "%d ", &in)>0)
-		{	P[i] = in;
+		while(fscanf(pafsfile, "%d ", &in)>0) {	
+			P[i] = in;
 			i++;
-			if(i%pafslen==0)
-			{	i = 0;
+			if(i%pafslen==0) {	
+				i = 0;
 				Dpafs.push_back(P);
 			}
 		}
@@ -263,8 +241,7 @@ int main(int argc, char** argv)
 		sprintf(filename, pafsfilename, n, c, l, "AB");
 		pairfile = fopen(filename, "w");
 
-		for(int iA = 0; iA < Apsdslist.size(); iA++)
-		{	
+		for(int iA = 0; iA < Apsdslist.size(); iA++) {	
 			if(decomps[n][c][0]*decomps[n][c][0]+decomps[n][c][1]*decomps[n][c][1]+decomps[n][c][2]*decomps[n][c][2] == 4*n && Aseqns[iA][0] != 0)
 				continue;
 			if(decomps[n][c][0]*decomps[n][c][0]+decomps[n][c][1]*decomps[n][c][1]+decomps[n][c][2]*decomps[n][c][2] == 4*n-2 && Aseqns[iA][0] == 0)
@@ -272,19 +249,18 @@ int main(int argc, char** argv)
 
 			Apsds = Apsdslist[iA];
 
-			for(int iB = 0; iB < Bpsdslist.size(); iB++)
-			{	
+			for(int iB = 0; iB < Bpsdslist.size(); iB++) {	
 				Bpsds = Bpsdslist[iB];
 
 				tobreak = false;
-				for(int j=1; j<=l/2; j++)
-				{	ABpsds[j] = Apsds[j]+Bpsds[j];
-					if(ABpsds[j] > 4*n+0.01)
-					{	tobreak = true;
+				for(int j=1; j<=l/2; j++) {	
+					ABpsds[j] = Apsds[j]+Bpsds[j];
+					if(ABpsds[j] > 4*n+0.01) {	
+						tobreak = true;
 						break;
 					}
 				}
-				if(tobreak)
+				if (tobreak)
 					continue;
 
 				for(int i = 0; i < pafslen; i++)
@@ -302,27 +278,25 @@ int main(int argc, char** argv)
 		sprintf(filename, pafsfilename, n, c, l, "CD");
 		pairfile = fopen(filename, "w");
 
-		for(int iC = 0; iC < Cpsdslist.size(); iC++)
-		{	
+		for(int iC = 0; iC < Cpsdslist.size(); iC++) {	
 			Cpsds = Cpsdslist[iC];
 
-			for(int iD = 0; iD < Dpsdslist.size(); iD++)
-			{	
+			for(int iD = 0; iD < Dpsdslist.size(); iD++) {	
 				Dpsds = Dpsdslist[iD];
 
 				tobreak = false;
-				for(int j=1; j<=l/2; j++)
-				{	CDpsds[j] = Cpsds[j]+Dpsds[j];
-					if(CDpsds[j] > 4*n+0.01)
-					{	tobreak = true;
+				for(int j=1; j<=l/2; j++) {	
+					CDpsds[j] = Cpsds[j]+Dpsds[j];
+					if(CDpsds[j] > 4*n+0.01) {	
+						tobreak = true;
 						break;
 					}
 				}
 				if(tobreak)
 					continue;
 
-				for(int i = 0; i < pafslen; i++)
-				{	CDpafs[i] = - (Cpafs[iC][i] + Dpafs[iD][i]);
+				for(int i = 0; i < pafslen; i++) {	
+					CDpafs[i] = - (Cpafs[iC][i] + Dpafs[iD][i]);
 					if(i==0)
 						CDpafs[i] += 4*n;
 				}
@@ -347,5 +321,4 @@ int main(int argc, char** argv)
 	fftw_destroy_plan(plan);
 	free(fft_signal);
 	free(fft_result);
-
 }
