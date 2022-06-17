@@ -178,14 +178,12 @@ int main(int argc, char** argv) {
 			}
 		}
 
-		if(!filtered_B) {
+		if (!filtered_B) {
 			std::array<int, MAX_N> compressB = compress(n, l, B);
 			if(myset_B.count(compressB)==0) {
-				for(int c = 0; c < decomps_len[n]; c++)
-				{
+				for(int c = 0; c < decomps_len[n]; c++) {
 
-					if(rowsum == Btarget[c])
-					{	
+					if(rowsum == Btarget[c]) {	
 						bool toadd_B = true;
 						#if REMOVE_EQUIV_B
 						for(int j=0; j<coprimelist_len[n] && toadd_B==true; j++)
@@ -196,20 +194,18 @@ int main(int argc, char** argv) {
 						}
 						#endif
 
-						if(toadd_B == true)
-						{	fprintseqn(Bseqnsfile[c], l, compressB.data());
+						if (toadd_B == true) {	
+							fprintseqn(Bseqnsfile[c], l, compressB.data());
 							fprintpafs(Bpafsfile[c], l, compressB.data());
 							Bcount[c]++;
 						}
 					}
-					if(rowsum == Ctarget[c])
-					{	
+					if (rowsum == Ctarget[c]) {	
 						fprintseqn(Cseqnsfile[c], l, compressB.data());
 						fprintpafs(Cpafsfile[c], l, compressB.data());
 						Ccount[c]++;
 					}
-					if(rowsum == Dtarget[c])
-					{	
+					if (rowsum == Dtarget[c]) {	
 						fprintseqn(Dseqnsfile[c], l, compressB.data());
 						fprintpafs(Dpafsfile[c], l, compressB.data());
 						Dcount[c]++;
@@ -220,22 +216,22 @@ int main(int argc, char** argv) {
 		}
 
 		int i;
-		for(i=n/2; i>=1; i--)
-		{	B[i] += 2;
+		for (i = n/2; i >= 1; i--) {	
+			B[i] += 2;
 			rowsum += 2;
 			fft_signal_A[i] = fft_signal_B[i] = A[i] = B[i];
-			if(2*i<n)
-			{	B[n-i] += 2;
+			if(2*i<n) {	
+				B[n-i] += 2;
 				rowsum += 2;
 				fft_signal_B[n-i] = B[n-i];
 				fft_signal_A[n-i] = A[n-i] = -B[n-i];
 			}
-			if(B[i]==3)
-			{	B[i] = -1;
+			if (B[i] == 3) {	
+				B[i] = -1;
 				rowsum -= 4;
 				fft_signal_A[i] = fft_signal_B[i] = A[i] = B[i];
-				if(2*i<n)
-				{	B[n-i] = -1;
+				if (2*i < n) {	
+					B[n-i] = -1;
 					rowsum -= 4;
 					fft_signal_B[n-i] = B[n-i];
 					fft_signal_A[n-i] = A[n-i] = -B[n-i];
@@ -244,7 +240,7 @@ int main(int argc, char** argv) {
 			else
 				break;
 		}
-		if(i==0)
+		if (i == 0)
 			break;
 	}
 
@@ -254,14 +250,13 @@ int main(int argc, char** argv) {
 	fclose(f);
 
 	printf("  %d-compressed matchings of length %d generated in %.2f seconds\n", d, n/d, (clock() - start)/(float)CLOCKS_PER_SEC);
-	for(int c=0; c<decomps_len[n]; c++)
+	for (int c = 0; c < decomps_len[n]; c++)
 		printf("    Case (%d, %d, %d): %d As, %d Bs, %d Cs, %d Ds\n", Btarget[c], Ctarget[c], Dtarget[c], Acount, Bcount[c], Ccount[c], Dcount[c]);
 
 	fclose(Aseqnsfile);
 	fclose(Apafsfile);
 
-	for(int c=0; c<decomps_len[n]; c++)
-	{	
+	for (int c = 0; c < decomps_len[n]; c++) {	
 		fclose(Bseqnsfile[c]);
 		fclose(Cseqnsfile[c]);
 		fclose(Dseqnsfile[c]);
@@ -276,5 +271,4 @@ int main(int argc, char** argv) {
 	fftw_destroy_plan(plan_B);
 	free(fft_signal_B);
 	free(fft_result_B);
-
 }
