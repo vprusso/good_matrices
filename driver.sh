@@ -24,5 +24,4 @@ else
 		./join_pairedmatchings $n
 		./remove_equivalent_matchedpairs $n
 	done
-	python print_timings_table.py $1 $u
 fi
