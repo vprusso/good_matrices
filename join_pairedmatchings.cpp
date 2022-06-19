@@ -9,17 +9,14 @@
 int main(int argc, char** argv) {
 	char filename[100];
 
-	if(argc==1)
+	if (argc==1)
 		std::cerr << "Need order of paired PAF matching files to join\n", exit(0);
 
 	const int n = atoi(argv[1]);
 
-	int casetosolve = -1;
+	int case_to_solve = -1;
 	if (argc > 2)
-		casetosolve = atoi(argv[2]);
-
-	int d = 1;
-	const int l = n/d;
+		case_to_solve = atoi(argv[2]);
 
 	mkdir("matchedpairs", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
@@ -32,14 +29,14 @@ int main(int argc, char** argv) {
 	std::ifstream file;
 	std::string str;
 	std::vector<std::string> Aseqns;
-	sprintf(filename, seqnsfilename, n, 0, l, "A");
+	sprintf(filename, seqnsfilename, n, 0, n, "A");
 	file.open(filename);
 	while(std::getline(file, str))
 		Aseqns.push_back(str);
 	file.close();
 
-	for(int c = 0; c < decomps_len[n]; c++) {
-		if(casetosolve != -1 && casetosolve != c)
+	for (int c = 0; c < decomps_len[n]; ++c) {
+		if (case_to_solve != -1 && case_to_solve != c)
 			continue;
 
 		clock_t start = clock();
@@ -47,19 +44,19 @@ int main(int argc, char** argv) {
 		std::vector<std::string> Bseqns, Cseqns, Dseqns, ABseqns, CDseqns;
 		std::ofstream outfile;
 
-		sprintf(filename, seqnsfilename, n, c, l, "B");
+		sprintf(filename, seqnsfilename, n, c, n, "B");
 		file.open(filename);
 		while(std::getline(file, str))
 			Bseqns.push_back(str);
 		file.close();
 
-		sprintf(filename, seqnsfilename, n, c, l, "C");
+		sprintf(filename, seqnsfilename, n, c, n, "C");
 		file.open(filename);
 		while(std::getline(file, str))
 			Cseqns.push_back(str);
 		file.close();
 
-		sprintf(filename, seqnsfilename, n, c, l, "D");
+		sprintf(filename, seqnsfilename, n, c, n, "D");
 		file.open(filename);
 		while(std::getline(file, str))
 			Dseqns.push_back(str);
@@ -68,15 +65,15 @@ int main(int argc, char** argv) {
 		std::string ABstr, CDstr;
 		std::ifstream ABfile, CDfile;
 
-		sprintf(filename, pafsfilename, n, c, l, "AB");
+		sprintf(filename, pafsfilename, n, c, n, "AB");
 		ABfile.open(filename);
-		sprintf(filename, pafsfilename, n, c, l, "CD");
+		sprintf(filename, pafsfilename, n, c, n, "CD");
 		CDfile.open(filename);
 
 		int colonind;
 		std::size_t sz;
 		int ABind1, ABind2, CDind1, CDind2;
-		int seqncount = 0;
+		int seqn_count = 0;
 		bool ABend = false, CDend = false;
 
 		if(std::getline(ABfile, str)) {	
@@ -97,15 +94,15 @@ int main(int argc, char** argv) {
 		else
 			ABend = CDend = true;
 
-		sprintf(filename, matchedfilename, n, c, l);
+		sprintf(filename, matchedfilename, n, c, n);
 		outfile.open(filename);
 
-		while(!(ABend && CDend)) {	
-			if(ABstr == CDstr) {
+		while (!(ABend && CDend)) {	
+			if (ABstr == CDstr) {
 				std::string eqstr = ABstr;
-				while(ABstr == eqstr) {	
+				while (ABstr == eqstr) {	
 					ABseqns.push_back(Aseqns[ABind1]+Bseqns[ABind2]);
-					if(std::getline(ABfile, str)) {	
+					if (std::getline(ABfile, str)) {	
 						colonind = str.find_first_of(":");
 						ABind1 = std::stoi(str.substr(colonind+2), &sz);
 						ABind2 = std::stoi(str.substr(colonind+2+sz));
@@ -116,7 +113,7 @@ int main(int argc, char** argv) {
 						break;
 					}
 				}
-				while(CDstr == eqstr) {	
+				while (CDstr == eqstr) {	
 					CDseqns.push_back(Cseqns[CDind1]+Dseqns[CDind2]);
 					if(std::getline(CDfile, str)) {	
 						colonind = str.find_first_of(":");
@@ -130,17 +127,18 @@ int main(int argc, char** argv) {
 					}
 				}
 
-				for(int i=0; i<CDseqns.size(); i++)
-					for(int j=0; j<ABseqns.size(); j++) {	
+				for (int i=0; i<CDseqns.size(); ++i) {
+					for (int j=0; j<ABseqns.size(); ++j) {	
 						outfile << ABseqns[j] << CDseqns[i] << '\n';
-						seqncount++;
+						seqn_count++;
 					}
+				}
 
 				ABseqns.clear();
 				CDseqns.clear();
 			}
-			else if(ABstr < CDstr) {	
-				if(std::getline(ABfile, str)) {	
+			else if (ABstr < CDstr) {	
+				if (std::getline(ABfile, str)) {	
 					colonind = str.find_first_of(":");
 					ABind1 = std::stoi(str.substr(colonind+2), &sz);
 					ABind2 = std::stoi(str.substr(colonind+2+sz));
@@ -152,7 +150,7 @@ int main(int argc, char** argv) {
 				}
 			}
 			else {
-				if(std::getline(CDfile, str)) {	
+				if (std::getline(CDfile, str)) {	
 					colonind = str.find_first_of(":");
 					CDind1 = std::stoi(str.substr(colonind+2), &sz);
 					CDind2 = std::stoi(str.substr(colonind+2+sz));
@@ -169,11 +167,11 @@ int main(int argc, char** argv) {
 		CDfile.close();
 		outfile.close();
 
-		sprintf(filename, "timings/%d.%d.%d.jointime", n, c, l);
+		sprintf(filename, "timings/%d.%d.%d.jointime", n, c, n);
 		FILE* f = fopen(filename, "w");
 		fprintf(f, "%.2f\n", (clock() - start)/(float)CLOCKS_PER_SEC);
 		fclose(f);
 
-		printf("  Case %d: %d matched sequence pairs of length %d generated in %.2f seconds\n", c, seqncount, l, (clock() - start)/(float)CLOCKS_PER_SEC);
+		printf("  Case %d: %d matched sequence pairs of length %d generated in %.2f seconds\n", c, seqn_count, n, (clock() - start)/(float)CLOCKS_PER_SEC);
 	}
 }

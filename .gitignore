@@ -1,3 +1,5 @@
+*.vscode
+
 # Ignore executable files
 generate_matching_instances_comp
 generate_pairedmatchings

@@ -18,7 +18,7 @@ const int HALF_MAX_N = 1+MAX_N/2;
 #include <vector>
 
 void fprintpair(FILE* f, int n, int* A, int iA, int iB) {	
-	for(int i=0; i<n; i++)
+	for(int i=0; i<n; ++i)
 		fprintf(f, "%d ", A[i]);
 	fprintf(f, ": %d %d\n", iA, iB);
 }
@@ -34,21 +34,18 @@ int main(int argc, char** argv) {
 		casetosolve = atoi(argv[2]);
 	}
 
-	int d = 1;
-	const int l = n/d;
-
 	const char seqnsfilename[] = "matchings/%d.%d.%d.%s.seqns.txt";
 	const char pafsfilename[] = "matchings/%d.%d.%d.%s.pafs.txt";
 
 	mkdir("timings", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
-	const int pafslen = l/2+1;
+	const int pafslen = n/2+1;
 
 	printf("ORDER %d: Generate compression sequence pairs\n", n);
 
-	double* fft_signal = (double*)malloc(sizeof(double)*l);
-	fftw_complex* fft_result = (fftw_complex*)malloc(sizeof(fftw_complex)*l);
-	fftw_plan plan = fftw_plan_dft_r2c_1d(l, fft_signal, fft_result, FFTW_ESTIMATE);
+	double* fft_signal = (double*)malloc(sizeof(double)*n);
+	fftw_complex* fft_result = (fftw_complex*)malloc(sizeof(fftw_complex)*n);
+	fftw_plan plan = fftw_plan_dft_r2c_1d(n, fft_signal, fft_result, FFTW_ESTIMATE);
 
 	char filename[100];
 	FILE* seqnsfile;
@@ -66,18 +63,18 @@ int main(int argc, char** argv) {
 	clock_t start = clock();
 	int splitcount = 0;
 
-	sprintf(filename, seqnsfilename, n, 0, l, "A");
+	sprintf(filename, seqnsfilename, n, 0, n, "A");
 	seqnsfile = fopen(filename, "r");
 	i = 0;
 	while(fscanf(seqnsfile, "%d ", &in)>0) {	
 		X[i] = in;
 		i++;
-		if (i % l == 0) {	
+		if (i % n == 0) {	
 			i = 0;
-			for(int j=0; j<l; j++)
+			for(int j=0; j<n; ++j)
 				fft_signal[j] = X[j];
 			fftw_execute(plan);
-			for(int j=1; j<=l/2; j++)
+			for(int j=1; j<=n/2; ++j)
 				psds[j] = fft_result[j][0]*fft_result[j][0]+fft_result[j][1]*fft_result[j][1];
 
 			Aseqns.push_back(X);
@@ -87,7 +84,7 @@ int main(int argc, char** argv) {
 	fclose(seqnsfile);
 
 	splitcount = 0;
-	sprintf(filename, pafsfilename, n, 0, l, "A");
+	sprintf(filename, pafsfilename, n, 0, n, "A");
 	pafsfile = fopen(filename, "r");
 	i = 0;
 	while(fscanf(pafsfile, "%d ", &in) > 0) {	
@@ -102,7 +99,7 @@ int main(int argc, char** argv) {
 	printf("  Computed A PSDs in %.2f seconds\n", (clock() - start)/(float)CLOCKS_PER_SEC);
 	#endif
 
-	for(int c = 0; c < decomps_len[n]; c++) {
+	for(int c = 0; c < decomps_len[n]; ++c) {
 		if(casetosolve != -1 && casetosolve != c)
 			continue;
 			
@@ -121,19 +118,19 @@ int main(int argc, char** argv) {
 
 		clock_t start = clock();
 		#if defined(AB) || defined(ABCD)
-		sprintf(filename, seqnsfilename, n, c, l, "B");
+		sprintf(filename, seqnsfilename, n, c, n, "B");
 		seqnsfile = fopen(filename, "r");
 		i = 0;
 		while(fscanf(seqnsfile, "%d ", &in)>0) {	
 			X[i] = in;
 			i++;
-			if ( i % l == 0) {	
+			if ( i % n == 0) {	
 				i = 0;
 
-				for(int j=0; j<l; j++)
+				for(int j=0; j<n; ++j)
 					fft_signal[j] = X[j];
 				fftw_execute(plan);
-				for(int j=1; j<=l/2; j++)
+				for(int j=1; j<=n/2; ++j)
 					psds[j] = fft_result[j][0]*fft_result[j][0];
 				
 				Bseqns.push_back(X);
@@ -142,7 +139,7 @@ int main(int argc, char** argv) {
 		}
 		fclose(seqnsfile);
 
-		sprintf(filename, pafsfilename, n, c, l, "B");
+		sprintf(filename, pafsfilename, n, c, n, "B");
 		pafsfile = fopen(filename, "r");
 		i = 0;
 		while(fscanf(pafsfile, "%d ", &in)>0) {	
@@ -157,18 +154,18 @@ int main(int argc, char** argv) {
 		#endif
 
 		#if defined(CD) || defined(ABCD)
-		sprintf(filename, seqnsfilename, n, c, l, "C");
+		sprintf(filename, seqnsfilename, n, c, n, "C");
 		seqnsfile = fopen(filename, "r");
 		i = 0;
 		while(fscanf(seqnsfile, "%d ", &in)>0) {	
 			X[i] = in;
 			i++;
-			if(i%l==0) {	
+			if (i % n == 0) {	
 				i = 0;
-				for(int j=0; j<l; j++)
+				for(int j=0; j<n; ++j)
 					fft_signal[j] = X[j];
 				fftw_execute(plan);
-				for(int j=1; j<=l/2; j++)
+				for(int j=1; j<=n/2; ++j)
 					psds[j] = fft_result[j][0]*fft_result[j][0];
 
 				Cseqns.push_back(X);
@@ -177,7 +174,7 @@ int main(int argc, char** argv) {
 		}
 		fclose(seqnsfile);
 
-		sprintf(filename, pafsfilename, n, c, l, "C");
+		sprintf(filename, pafsfilename, n, c, n, "C");
 		pafsfile = fopen(filename, "r");
 		i = 0;
 		while(fscanf(pafsfile, "%d ", &in)>0) {	
@@ -190,18 +187,18 @@ int main(int argc, char** argv) {
 		}
 		fclose(pafsfile);
 
-		sprintf(filename, seqnsfilename, n, c, l, "D");
+		sprintf(filename, seqnsfilename, n, c, n, "D");
 		seqnsfile = fopen(filename, "r");
 		i = 0;
 		while(fscanf(seqnsfile, "%d ", &in)>0) {	
 			X[i] = in;
 			i++;
-			if ( i % l == 0) {	
+			if ( i % n == 0) {	
 				i = 0;
-				for(int j=0; j<l; j++)
+				for(int j=0; j<n; ++j)
 					fft_signal[j] = X[j];
 				fftw_execute(plan);
-				for(int j=1; j<=l/2; j++)
+				for(int j=1; j<=n/2; ++j)
 					psds[j] = fft_result[j][0]*fft_result[j][0];
 				
 				Dseqns.push_back(X);
@@ -210,7 +207,7 @@ int main(int argc, char** argv) {
 		}
 		fclose(seqnsfile);
 
-		sprintf(filename, pafsfilename, n, c, l, "D");
+		sprintf(filename, pafsfilename, n, c, n, "D");
 		pafsfile = fopen(filename, "r");
 		i = 0;
 		while(fscanf(pafsfile, "%d ", &in)>0) {	
@@ -238,10 +235,10 @@ int main(int argc, char** argv) {
 		bool tobreak;
 
 		#if defined(AB) || defined(ABCD)
-		sprintf(filename, pafsfilename, n, c, l, "AB");
+		sprintf(filename, pafsfilename, n, c, n, "AB");
 		pairfile = fopen(filename, "w");
 
-		for(int iA = 0; iA < Apsdslist.size(); iA++) {	
+		for(int iA = 0; iA < Apsdslist.size(); ++iA) {	
 			if(decomps[n][c][0]*decomps[n][c][0]+decomps[n][c][1]*decomps[n][c][1]+decomps[n][c][2]*decomps[n][c][2] == 4*n && Aseqns[iA][0] != 0)
 				continue;
 			if(decomps[n][c][0]*decomps[n][c][0]+decomps[n][c][1]*decomps[n][c][1]+decomps[n][c][2]*decomps[n][c][2] == 4*n-2 && Aseqns[iA][0] == 0)
@@ -249,11 +246,11 @@ int main(int argc, char** argv) {
 
 			Apsds = Apsdslist[iA];
 
-			for(int iB = 0; iB < Bpsdslist.size(); iB++) {	
+			for(int iB = 0; iB < Bpsdslist.size(); ++iB) {	
 				Bpsds = Bpsdslist[iB];
 
 				tobreak = false;
-				for(int j=1; j<=l/2; j++) {	
+				for(int j=1; j<=n/2; ++j) {	
 					ABpsds[j] = Apsds[j]+Bpsds[j];
 					if(ABpsds[j] > 4*n+0.01) {	
 						tobreak = true;
@@ -263,7 +260,7 @@ int main(int argc, char** argv) {
 				if (tobreak)
 					continue;
 
-				for(int i = 0; i < pafslen; i++)
+				for(int i = 0; i < pafslen; ++i)
 					ABpafs[i] = Apafs[iA][i] + Bpafs[iB][i];
 
 				fprintpair(pairfile, pafslen, ABpafs.data(), iA, iB);
@@ -275,17 +272,17 @@ int main(int argc, char** argv) {
 		#endif
 
 		#if defined(CD) || defined(ABCD)
-		sprintf(filename, pafsfilename, n, c, l, "CD");
+		sprintf(filename, pafsfilename, n, c, n, "CD");
 		pairfile = fopen(filename, "w");
 
-		for(int iC = 0; iC < Cpsdslist.size(); iC++) {	
+		for(int iC = 0; iC < Cpsdslist.size(); ++iC) {	
 			Cpsds = Cpsdslist[iC];
 
-			for(int iD = 0; iD < Dpsdslist.size(); iD++) {	
+			for(int iD = 0; iD < Dpsdslist.size(); ++iD) {	
 				Dpsds = Dpsdslist[iD];
 
 				tobreak = false;
-				for(int j=1; j<=l/2; j++) {	
+				for(int j=1; j<=n/2; ++j) {	
 					CDpsds[j] = Cpsds[j]+Dpsds[j];
 					if(CDpsds[j] > 4*n+0.01) {	
 						tobreak = true;
@@ -295,7 +292,7 @@ int main(int argc, char** argv) {
 				if(tobreak)
 					continue;
 
-				for(int i = 0; i < pafslen; i++) {	
+				for(int i = 0; i < pafslen; ++i) {	
 					CDpafs[i] = - (Cpafs[iC][i] + Dpafs[iD][i]);
 					if(i==0)
 						CDpafs[i] += 4*n;
@@ -309,7 +306,7 @@ int main(int argc, char** argv) {
 		fclose(pairfile);
 		#endif
 
-		sprintf(filename, "timings/%d.%d.%d.genpairtime", n, c, l);
+		sprintf(filename, "timings/%d.%d.%d.genpairtime", n, c, n);
 		FILE* f = fopen(filename, "w");
 		fprintf(f, "%.2f\n", (clock() - start)/(float)CLOCKS_PER_SEC);
 		fclose(f);

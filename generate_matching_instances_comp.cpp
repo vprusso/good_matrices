@@ -15,35 +15,35 @@
 #define REMOVE_EQUIV_A 1
 #define REMOVE_EQUIV_B 0
 
-std::array<int, MAX_N> compress(int n, int l, std::array<int, MAX_N> A) {	
+std::array<int, MAX_N> compress(int n, std::array<int, MAX_N> A) {	
 	std::array<int, MAX_N> result = {};
-	for(int i=0; i<n; i++)
-		result[i%l] += A[i];
+	for (int i=0; i < n; ++i)
+		result[i % n] += A[i];
 	return result;
 }
 
 std::array<int, MAX_N> permuteA(int n, int k, std::array<int, MAX_N> A) {	
 	std::array<int, MAX_N> result = {};
-	for(int i=0; i<n; i++)
+	for(int i=0; i<n; ++i)
 		result[i] = A[(i*k)%n];
 	return result;
 }
 
 int paf(int n, int* A, int s) {	
 	int res = 0;
-	for(int i=0; i<n; i++)
+	for(int i=0; i<n; ++i)
 		res += A[i]*A[(i+s)%n];
 	return res;
 }
 
 void fprintseqn(FILE* f, int n, int* A) {	
-	for(int i=0; i<n; i++)
+	for(int i=0; i<n; ++i)
 		fprintf(f, "%d ", A[i]);
 	fprintf(f, "\n");
 }
 
 void fprintpafs(FILE* f, int n, int* A) {	
-	for(int i=0; i<=n/2; i++)
+	for(int i=0; i<=n/2; ++i)
 		fprintf(f, "%d ", paf(n, A, i));
 	fprintf(f, "\n");
 }
@@ -61,9 +61,6 @@ int main(int argc, char** argv) {
 		fprintf(stderr, "Need order of matchings to compute\n"), exit(0);
 
 	const int n = atoi(argv[1]);
-
-	int d = 1;
-	const int l = n/d;
 
 	const char seqns_filename[] = "matchings/%d.%d.%d.%c.seqns.txt";
 	const char pafs_filename[] = "matchings/%d.%d.%d.%c.pafs.txt";
@@ -86,23 +83,23 @@ int main(int argc, char** argv) {
 	int Btarget[4], Ctarget[4], Dtarget[4];
 	
 	char filename[100];
-	sprintf(filename, seqns_filename, n, 0, l, 'A');
+	sprintf(filename, seqns_filename, n, 0, n, 'A');
 	Aseqnsfile = fopen(filename, "w");
-	sprintf(filename, pafs_filename, n, 0, l, 'A');
+	sprintf(filename, pafs_filename, n, 0, n, 'A');
 	Apafsfile = fopen(filename, "w");
 	
-	for(int c = 0; c < decomps_len[n]; c++) {
-		sprintf(filename, seqns_filename, n, c, l, 'B');
+	for(int c = 0; c < decomps_len[n]; ++c) {
+		sprintf(filename, seqns_filename, n, c, n, 'B');
 		Bseqnsfile[c] = fopen(filename, "w");
-		sprintf(filename, seqns_filename, n, c, l, 'C');
+		sprintf(filename, seqns_filename, n, c, n, 'C');
 		Cseqnsfile[c] = fopen(filename, "w");
-		sprintf(filename, seqns_filename, n, c, l, 'D');
+		sprintf(filename, seqns_filename, n, c, n, 'D');
 		Dseqnsfile[c] = fopen(filename, "w");
-		sprintf(filename, pafs_filename, n, c, l, 'B');
+		sprintf(filename, pafs_filename, n, c, n, 'B');
 		Bpafsfile[c] = fopen(filename, "w");
-		sprintf(filename, pafs_filename, n, c, l, 'C');
+		sprintf(filename, pafs_filename, n, c, n, 'C');
 		Cpafsfile[c] = fopen(filename, "w");
-		sprintf(filename, pafs_filename, n, c, l, 'D');
+		sprintf(filename, pafs_filename, n, c, n, 'D');
 		Dpafsfile[c] = fopen(filename, "w");
 
 		Btarget[c] = decomps[n][c][1]*(decomps[n][c][1] % 4 == n % 4 ? 1 : -1);
@@ -119,13 +116,13 @@ int main(int argc, char** argv) {
 	B[0] = 1;
 	fft_signal_A[0] = 1;
 	fft_signal_B[0] = 1;
-	for(int i=1; i<=n/2; i++) {	
+	for(int i=1; i<=n/2; ++i) {	
 		A[i] = -1;
 		B[i] = -1;
 		fft_signal_A[i] = A[i];
 		fft_signal_B[i] = B[i];
 	}
-	for(int i=n/2+1; i<n; i++) {	
+	for(int i=n/2+1; i<n; ++i) {	
 		A[i] = 1;
 		B[i] = -1;
 		fft_signal_A[i] = A[i];
@@ -142,35 +139,35 @@ int main(int argc, char** argv) {
 		bool filtered_B = false;
 		
 		fftw_execute(plan_A);
-		for(int i=0; i<=n/2; i++) {	
+		for(int i=0; i<=n/2; ++i) {	
 			double psd_A_i = fft_result_A[i][0]*fft_result_A[i][0] + fft_result_A[i][1]*fft_result_A[i][1];
 			if(psd_A_i > 4*n + 0.01)
 				filtered_A = true;
 		}
 
 		fftw_execute(plan_B);
-		for(int i=0; i<=n/2; i++) {	
+		for(int i=0; i<=n/2; ++i) {	
 			double psd_B_i = fft_result_B[i][0]*fft_result_B[i][0] + fft_result_B[i][1]*fft_result_B[i][1];
 			if(psd_B_i > 4*n + 0.01)
 				filtered_B = true;
 		}
 
 		if(!filtered_A) {	
-			std::array<int, MAX_N> compressA = compress(n, l, A);
+			std::array<int, MAX_N> compressA = compress(n, A);
 			if(myset_A.count(compressA)==0) {	
 				bool toadd_A = true;
 				#if REMOVE_EQUIV_A
-				for(int j=0; j<coprimelist_len[n] && toadd_A==true; j++) {	
+				for(int j=0; j<coprimelist_len[n] && toadd_A==true; ++j) {	
 					const int k = coprimelist[n][j];
-					std::array<int, MAX_N> permutedcomp = permuteA(l, k, compressA);
+					std::array<int, MAX_N> permutedcomp = permuteA(n, k, compressA);
 					if(myset_A.count(permutedcomp)!=0)
 						toadd_A = false;
 				}
 				#endif
 				
 				if(toadd_A == true) {	
-					fprintseqn(Aseqnsfile, l, compressA.data());
-					fprintpafs(Apafsfile, l, compressA.data());
+					fprintseqn(Aseqnsfile, n, compressA.data());
+					fprintpafs(Apafsfile, n, compressA.data());
 					Acount++;
 				}
 				
@@ -179,14 +176,14 @@ int main(int argc, char** argv) {
 		}
 
 		if (!filtered_B) {
-			std::array<int, MAX_N> compressB = compress(n, l, B);
+			std::array<int, MAX_N> compressB = compress(n, B);
 			if(myset_B.count(compressB)==0) {
-				for(int c = 0; c < decomps_len[n]; c++) {
+				for(int c = 0; c < decomps_len[n]; ++c) {
 
 					if(rowsum == Btarget[c]) {	
 						bool toadd_B = true;
 						#if REMOVE_EQUIV_B
-						for(int j=0; j<coprimelist_len[n] && toadd_B==true; j++)
+						for(int j=0; j<coprimelist_len[n] && toadd_B==true; ++j)
 						{	const int k = coprimelist[n][j];
 							std::array<int, MAX_N> permutedcomp = permuteA(l, k, compressB);
 							if(myset_B.count(permutedcomp)!=0)
@@ -195,19 +192,19 @@ int main(int argc, char** argv) {
 						#endif
 
 						if (toadd_B == true) {	
-							fprintseqn(Bseqnsfile[c], l, compressB.data());
-							fprintpafs(Bpafsfile[c], l, compressB.data());
+							fprintseqn(Bseqnsfile[c], n, compressB.data());
+							fprintpafs(Bpafsfile[c], n, compressB.data());
 							Bcount[c]++;
 						}
 					}
 					if (rowsum == Ctarget[c]) {	
-						fprintseqn(Cseqnsfile[c], l, compressB.data());
-						fprintpafs(Cpafsfile[c], l, compressB.data());
+						fprintseqn(Cseqnsfile[c], n, compressB.data());
+						fprintpafs(Cpafsfile[c], n, compressB.data());
 						Ccount[c]++;
 					}
 					if (rowsum == Dtarget[c]) {	
-						fprintseqn(Dseqnsfile[c], l, compressB.data());
-						fprintpafs(Dpafsfile[c], l, compressB.data());
+						fprintseqn(Dseqnsfile[c], n, compressB.data());
+						fprintpafs(Dpafsfile[c], n, compressB.data());
 						Dcount[c]++;
 					}
 				}
@@ -244,19 +241,19 @@ int main(int argc, char** argv) {
 			break;
 	}
 
-	sprintf(filename, "timings/%d.%d.gencomptime", n, l);
+	sprintf(filename, "timings/%d.%d.gencomptime", n, n);
 	FILE* f = fopen(filename, "w");
 	fprintf(f, "%.2f\n", (clock() - start)/(float)CLOCKS_PER_SEC);
 	fclose(f);
 
-	printf("  %d-compressed matchings of length %d generated in %.2f seconds\n", d, n/d, (clock() - start)/(float)CLOCKS_PER_SEC);
-	for (int c = 0; c < decomps_len[n]; c++)
+	printf("  %d-compressed matchings of length %d generated in %.2f seconds\n", 1, n, (clock() - start)/(float)CLOCKS_PER_SEC);
+	for (int c = 0; c < decomps_len[n]; ++c)
 		printf("    Case (%d, %d, %d): %d As, %d Bs, %d Cs, %d Ds\n", Btarget[c], Ctarget[c], Dtarget[c], Acount, Bcount[c], Ccount[c], Dcount[c]);
 
 	fclose(Aseqnsfile);
 	fclose(Apafsfile);
 
-	for (int c = 0; c < decomps_len[n]; c++) {	
+	for (int c = 0; c < decomps_len[n]; ++c) {	
 		fclose(Bseqnsfile[c]);
 		fclose(Cseqnsfile[c]);
 		fclose(Dseqnsfile[c]);

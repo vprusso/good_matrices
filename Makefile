@@ -1,8 +1,6 @@
 COMP = c++
 PHONY:
 	@echo "Use ./driver.sh n to enumerate good matrices of odd order n divisible by 3"
-maplesat_static_%: compile_maplesat.sh
-	./compile_maplesat.sh $*
 all: generate_matching_instances_comp generate_pairedmatchings join_pairedmatchings remove_equivalent_matchedpairs remove_equivalent_exhaust
 generate_matching_instances_comp: generate_matching_instances_comp.cpp decomps.h coprimelist.h
 	$(COMP) generate_matching_instances_comp.cpp -O3 -std=c++0x -lfftw3 -o generate_matching_instances_comp

@@ -19,14 +19,7 @@ def get_dir_size(path="."):
                 total += get_dir_size(entry.path)
     return total
 
-#parser = argparse.ArgumentParser()
-#parser.add_argument("-d", help="Dimension to run", required=True, type=int)
-#
-#args = parser.parse_args()
-#dim = args.d
-
-#odd_nums = odd_numbers(3)
-odd_nums = [35, 37, 39]
+odd_nums = [53]
 fle = Path("metrics.txt")
 fle.touch(exist_ok=True)
 

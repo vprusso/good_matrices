@@ -13,66 +13,54 @@
 #include "decomps.h"
 
 #define MAX_N 70
-#define VERBOSE 0
-#define PRINTPAFS 0
-
-#define NDEBUG
 
 int paf(int n, const std::array<int, MAX_N> &A, int s) {	
 	int res = 0;
-	for(int i=0; i<n; i++)
+	for (int i=0; i<n; ++i)
 		res += A[i]*A[(i+s)%n];
 	return res;
 }
 
-void swap(std::array<int, MAX_N> &A, std::array<int, MAX_N> &B) {	
-	std::array<int, MAX_N> tmp;
-	tmp = A;
-	A = B;
-	B = tmp;
-}
-
 void negateA(int n, std::array<int, MAX_N> &A) {	
-	for(int i=0; i<n; i++)
+	for (int i=0; i<n; ++i)
 		A[i] = -A[i];
 }
 
 void altnegateA(int n, std::array<int, MAX_N> &A) {	
-	for(int i=1; i<n; i+=2)
+	for (int i=1; i<n; i+=2)
 		A[i] = -A[i];
 }
 
 std::array<int, MAX_N> permuteA(int n, int k, int s, const std::array<int, MAX_N> &A) {	
 	std::array<int, MAX_N> result = {};
-	for(int i=0; i<n; i++)
+	for(int i=0; i<n; ++i)
 		result[i] = A[(i*k+s)%n];
-	
 	return result;
 }
 
 std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> minrep(int n, int l, const std::array<int, MAX_N> &A, const std::array<int, MAX_N> &B, const std::array<int, MAX_N> &C, const std::array<int, MAX_N> &D) {	
 	std::set<std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>>> equivseqns;
 
-	for(int j=0; j<coprimelist_len[n]; j++) {	
+	for (int j=0; j<coprimelist_len[n]; ++j) {	
 		int k = coprimelist[n][j];
 		std::array<int, MAX_N> permutedA = permuteA(l, k, 0, A);
 		std::array<int, MAX_N> permutedB = permuteA(l, k, 0, B);
 		std::array<int, MAX_N> permutedC = permuteA(l, k, 0, C);
 		std::array<int, MAX_N> permutedD = permuteA(l, k, 0, D);
 
-		if(permutedA[0]<0)
+		if (permutedA[0]<0)
 			negateA(l, permutedA);
 
-		if(permutedB[0]<0)
+		if (permutedB[0]<0)
 			negateA(l, permutedB);
 
-		if(permutedC[0]<0)
+		if (permutedC[0]<0)
 			negateA(l, permutedC);
 
-		if(permutedD[0]<0)
+		if (permutedD[0]<0)
 			negateA(l, permutedD);
 
-		if(n % 2 == 0) {	
+		if (n % 2 == 0) {	
 			std::array<int, MAX_N> altpermutedA = permuteA(l, 1, n/2, permutedA);
 			std::array<int, MAX_N> altpermutedB = permuteA(l, 1, n/2, permutedB);
 			std::array<int, MAX_N> altpermutedC = permuteA(l, 1, n/2, permutedC);
@@ -104,11 +92,11 @@ std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N
 		}
 
 		if(permutedC>permutedD)
-			swap(permutedC, permutedD);
+			std::swap(permutedC, permutedD);
 		if(permutedB>permutedC)
-			swap(permutedB, permutedC);
+			std::swap(permutedB, permutedC);
 		if(permutedC>permutedD)
-			swap(permutedC, permutedD);
+			std::swap(permutedC, permutedD);
 
 		equivseqns.insert(make_tuple(permutedA, permutedB, permutedC, permutedD));
 	}
@@ -148,32 +136,16 @@ void fprintseqn(FILE* f, int n, const std::tuple<std::array<int, MAX_N>, std::ar
 	std::array<int, MAX_N> D;
 	std::tie(A, B, C, D) = seqn;
 
-	for(int i=0; i<n; i++)
+	for(int i=0; i<n; ++i)
 		fprintf(f, "%d ", A[i]);
-	for(int i=0; i<n; i++)
+	for(int i=0; i<n; ++i)
 		fprintf(f, "%d ", B[i]);
-	for(int i=0; i<n; i++)
+	for(int i=0; i<n; ++i)
 		fprintf(f, "%d ", C[i]);
-	for(int i=0; i<n; i++)
+	for(int i=0; i<n; ++i)
 		fprintf(f, "%d ", D[i]);
 	fprintf(f, "\n");
 }
-
-#if PRINTPAFS==1
-int paf(int n, int s, std::array<int, MAX_N> A) {	
-	int res = 0;
-	for(int i=0; i<n; i++)
-		res += A[i]*A[(i+s)%n];
-	return res;
-}
-
-int rowsum(const int n, const std::array<int, MAX_N> &A) {	
-	int result = 0;
-	for(int i=0; i<n; i++)
-		result += A[i];
-	return result;
-}
-#endif
 
 void fprettyprintseqn(FILE* f, int n, const std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> &seqn) {	
 	std::array<int, MAX_N> A;
@@ -182,47 +154,17 @@ void fprettyprintseqn(FILE* f, int n, const std::tuple<std::array<int, MAX_N>, s
 	std::array<int, MAX_N> D;
 	std::tie(A, B, C, D) = seqn;
 
-	for(int i=0; i<n; i++)
+	for(int i=0; i<n; ++i)
 		fprintf(f, "%c", A[i] == 1 ? '+' : '-');
 	fprintf(f, " ");
-	for(int i=0; i<n; i++)
+	for(int i=0; i<n; ++i)
 		fprintf(f, "%c", B[i] == 1 ? '+' : '-');
 	fprintf(f, " ");
-	for(int i=0; i<n; i++)
+	for(int i=0; i<n; ++i)
 		fprintf(f, "%c", C[i] == 1 ? '+' : '-');
 	fprintf(f, " ");
-	for(int i=0; i<n; i++)
+	for(int i=0; i<n; ++i)
 		fprintf(f, "%c", D[i] == 1 ? '+' : '-');
-
-	#if PRINTPAFS==1
-	fprintf(f, " %d %d %d %d |", rowsum(n, A), rowsum(n, B), rowsum(n, C), rowsum(n, D));
-	
-	fprintf(f, " (");
-	for(int i=0; i<n; i++)
-		fprintf(f, "%d%s", paf(n, A, i)+paf(n, B, i)+paf(n, C, i)+paf(n, D, i), i<n-1 ? " " : "");
-	fprintf(f, ") ");
-
-	fprintf(f, "(");
-	for(int i=0; i<n; i++)
-		fprintf(f, "%d%s", paf(n, A, i), i<n-1 ? " " : "");
-	fprintf(f, ") ");
-
-	fprintf(f, "(");
-	for(int i=0; i<n; i++)
-		fprintf(f, "%d%s", paf(n, B, i), i<n-1 ? " " : "");
-	fprintf(f, ") ");
-
-	fprintf(f, "(");
-	for(int i=0; i<n; i++)
-		fprintf(f, "%d%s", paf(n, C, i), i<n-1 ? " " : "");
-	fprintf(f, ") ");
-
-	fprintf(f, "(");
-	for(int i=0; i<n; i++)
-		fprintf(f, "%d%s", paf(n, D, i), i<n-1 ? " " : "");
-	fprintf(f, ") ");
-	#endif
-
 }
 
 int main(int argc, char** argv) {
@@ -266,7 +208,7 @@ int main(int argc, char** argv) {
 
 	clock_t start = clock();
 
-	for(int c = 0; c < decomps_len[n]; c++) {
+	for(int c = 0; c < decomps_len[n]; ++c) {
 		if(casetosolve != -1 && casetosolve != c)
 			continue;
 
@@ -278,24 +220,24 @@ int main(int argc, char** argv) {
 		while(fscanf(seqnsfile, "%d ", &in)>0) {	
 			A[0] = in;
 			int res;
-			for(int i=1; i<n; i++) {	
+			for(int i=1; i<n; ++i) {	
 				res = fscanf(seqnsfile, "%d ", &in);
 				A[i] = in;
 			}
-			for(int i=0; i<n; i++) {	
+			for(int i=0; i<n; ++i) {	
 				res = fscanf(seqnsfile, "%d ", &in);
 				B[i] = in;
 			}
-			for(int i=0; i<n; i++) {	
+			for(int i=0; i<n; ++i) {	
 				res = fscanf(seqnsfile, "%d ", &in);
 				C[i] = in;
 			}
-			for(int i=0; i<n; i++) {	
+			for(int i=0; i<n; ++i) {	
 				res = fscanf(seqnsfile, "%d ", &in);
 				D[i] = in;
 			}
 
-			for(int s=1; s<=n/2; s++) {	
+			for(int s=1; s<=n/2; ++s) {	
 				if(paf(n, A, s) + paf(n, B, s) + paf(n, C, s) + paf(n, D, s) != 0) {	
 					invalidcount++;
 					break;
@@ -304,25 +246,13 @@ int main(int argc, char** argv) {
 
 			std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> repseqn = minrep_full(n, n, A, B, C, D);
 
-			#if VERBOSE
-			fprettyprintseqn(stdout, n, make_tuple(A, B, C, D));
-			printf(" is equivalent to ");
-			fprettyprintseqn(stdout, n, repseqn);
-			#endif
-
 			if(inequivseqns.count(repseqn)==0) {
 				inequivseqns.insert(repseqn);
 				fprintseqn(seqnsoutfile, n, make_tuple(A, B, C, D));
 				fprettyprintseqn(seqnsprettyoutfile, n, make_tuple(A, B, C, D));
 				fprintf(seqnsprettyoutfile, "\n");
-				#if VERBOSE
-				printf(" (new)");
-				#endif
 				inequivcount++;
 			}
-			#if VERBOSE
-			printf("\n");
-			#endif
 
 			totalcount++;
 		}
