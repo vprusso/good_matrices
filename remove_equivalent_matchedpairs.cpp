@@ -1,12 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <time.h>
 #include <tuple>
 #include <array>
 #include <set>
-#include <sys/types.h>
 #include <sys/stat.h>
 #include "coprimelist.h"
 #include "decomps.h"

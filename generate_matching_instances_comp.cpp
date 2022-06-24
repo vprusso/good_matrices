@@ -1,16 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <time.h>
 #include <fftw3.h>
-#include <sys/types.h>
 #include <sys/stat.h>
-#include "decomps.h"
-
 #include <array>
 #include <set>
+#include "decomps.h"
 #include "coprimelist.h"
+
 #define MAX_N 70
 #define REMOVE_EQUIV_A 1
 #define REMOVE_EQUIV_B 0

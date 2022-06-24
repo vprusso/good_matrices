@@ -1,24 +1,14 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <time.h>
 #include <fftw3.h>
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <array>
+#include <vector>
 #include "decomps.h"
-
-#if !defined(AB) && !defined(CD)
-#define ABCD
-#endif
 
 const int MAX_N = 70;
 const int HALF_MAX_N = 1+MAX_N/2;
-#include <array>
-#include <vector>
 
 void fprintpair(FILE *f, int n, int* A, int iA, int iB) {	
-	for (int i=0; i<n; ++i)
+	for (int i=0; i < n; ++i)
 		fprintf(f, "%d ", A[i]);
 	fprintf(f, ": %d %d\n", iA, iB);
 }
@@ -56,7 +46,6 @@ int main(int argc, char** argv) {
 
 	int in, i;
 
-	#if defined(AB) || defined(ABCD)
 	clock_t start = clock();
 
 	sprintf(filename, seqns_filename, n, 0, n, "A");
@@ -92,7 +81,6 @@ int main(int argc, char** argv) {
 	}
 	fclose(pafs_file);
 	printf("  Computed A PSDs in %.2f seconds\n", (clock() - start)/(float)CLOCKS_PER_SEC);
-	#endif
 
 	for (int c = 0; c < decomps_len[n]; ++c) {
 		if (case_to_solve != c)
@@ -112,7 +100,6 @@ int main(int argc, char** argv) {
 		std::array<int, HALF_MAX_N> CD_pafs;
 
 		clock_t start = clock();
-		#if defined(AB) || defined(ABCD)
 		sprintf(filename, seqns_filename, n, c, n, "B");
 		seqns_file = fopen(filename, "r");
 		i = 0;
@@ -146,9 +133,7 @@ int main(int argc, char** argv) {
 			}
 		}
 		fclose(pafs_file);
-		#endif
 
-		#if defined(CD) || defined(ABCD)
 		sprintf(filename, seqns_filename, n, c, n, "C");
 		seqns_file = fopen(filename, "r");
 		i = 0;
@@ -214,7 +199,6 @@ int main(int argc, char** argv) {
 			}
 		}
 		fclose(pafs_file);
-		#endif
 
 		long ABcount = 0;
 		long CD_count = 0;
@@ -229,7 +213,6 @@ int main(int argc, char** argv) {
 		FILE* pair_file;
 		bool to_break;
 
-		#if defined(AB) || defined(ABCD)
 		sprintf(filename, pafs_filename, n, c, n, "AB");
 		pair_file = fopen(filename, "w");
 
@@ -262,11 +245,8 @@ int main(int argc, char** argv) {
 				ABcount++;
 			}
 		}
-
 		fclose(pair_file);
-		#endif
 
-		#if defined(CD) || defined(ABCD)
 		sprintf(filename, pafs_filename, n, c, n, "CD");
 		pair_file = fopen(filename, "w");
 
@@ -299,7 +279,6 @@ int main(int argc, char** argv) {
 		}
 
 		fclose(pair_file);
-		#endif
 
 		sprintf(filename, "timings/%d.%d.%d.genpairtime", n, c, n);
 		FILE* f = fopen(filename, "w");
