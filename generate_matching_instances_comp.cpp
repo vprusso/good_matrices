@@ -131,14 +131,14 @@ int main(int argc, char** argv) {
 		bool filtered_B = false;
 		
 		fftw_execute(plan_A);
-		for(int i=0; i<=n/2; ++i) {	
+		for (int i=0; i<=n/2; ++i) {	
 			double psd_A_i = fft_result_A[i][0]*fft_result_A[i][0] + fft_result_A[i][1]*fft_result_A[i][1];
 			if(psd_A_i > 4*n + 0.01)
 				filtered_A = true;
 		}
 
 		fftw_execute(plan_B);
-		for(int i=0; i<=n/2; ++i) {	
+		for (int i=0; i<=n/2; ++i) {	
 			double psd_B_i = fft_result_B[i][0]*fft_result_B[i][0] + fft_result_B[i][1]*fft_result_B[i][1];
 			if(psd_B_i > 4*n + 0.01)
 				filtered_B = true;
@@ -149,7 +149,7 @@ int main(int argc, char** argv) {
 			if(myset_A.count(compressA)==0) {	
 				bool toadd_A = true;
 				#if REMOVE_EQUIV_A
-				for(int j=0; j<coprimelist_len[n] && toadd_A==true; ++j) {	
+				for (int j=0; j<coprimelist_len[n] && toadd_A==true; ++j) {	
 					const int k = coprimelist[n][j];
 					std::array<int, MAX_N> permutedcomp = permute(n, k, compressA);
 					if(myset_A.count(permutedcomp)!=0)
@@ -169,13 +169,13 @@ int main(int argc, char** argv) {
 
 		if (!filtered_B) {
 			std::array<int, MAX_N> compressB = compress(n, B);
-			if(myset_B.count(compressB)==0) {
-				for(int c = 0; c < decomps_len[n]; ++c) {
+			if (myset_B.count(compressB)==0) {
+				for (int c = 0; c < decomps_len[n]; ++c) {
 
 					if(rowsum == Btarget[c]) {	
 						bool toadd_B = true;
 						#if REMOVE_EQUIV_B
-						for(int j=0; j<coprimelist_len[n] && toadd_B==true; ++j)
+						for (int j=0; j<coprimelist_len[n] && toadd_B==true; ++j)
 						{	const int k = coprimelist[n][j];
 							std::array<int, MAX_N> permutedcomp = permute(l, k, compressB);
 							if(myset_B.count(permutedcomp)!=0)
@@ -205,7 +205,7 @@ int main(int argc, char** argv) {
 		}
 
 		int i;
-		for (i = n/2; i >= 1; i--) {	
+		for (i = n/2; i >= 1; --i) {	
 			B[i] += 2;
 			rowsum += 2;
 			fft_signal_A[i] = fft_signal_B[i] = A[i] = B[i];

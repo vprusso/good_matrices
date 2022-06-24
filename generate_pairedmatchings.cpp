@@ -139,10 +139,10 @@ int main(int argc, char** argv) {
 			i++;
 			if (i % n == 0) {	
 				i = 0;
-				for(int j=0; j<n; ++j)
+				for (int j=0; j<n; ++j)
 					fft_signal[j] = X[j];
 				fftw_execute(plan);
-				for(int j=1; j<=n/2; ++j)
+				for (int j=1; j<=n/2; ++j)
 					psds[j] = fft_result[j][0]*fft_result[j][0];
 
 				C_seqns.push_back(X);
@@ -172,10 +172,10 @@ int main(int argc, char** argv) {
 			i++;
 			if (i % n == 0) {	
 				i = 0;
-				for(int j = 0; j < n; ++j)
+				for (int j = 0; j < n; ++j)
 					fft_signal[j] = X[j];
 				fftw_execute(plan);
-				for(int j = 1; j <= n/2; ++j)
+				for (int j = 1; j <= n/2; ++j)
 					psds[j] = fft_result[j][0]*fft_result[j][0];
 				
 				D_seqns.push_back(X);
@@ -213,7 +213,7 @@ int main(int argc, char** argv) {
 		sprintf(filename, pafs_filename, n, c, n, "AB");
 		pair_file = fopen(filename, "w");
 
-		for(int iA = 0; iA < A_psds_list.size(); ++iA) {	
+		for (int iA = 0, a_len = A_psds_list.size(); iA < a_len; ++iA) {	
 			if(decomps[n][c][0]*decomps[n][c][0]+decomps[n][c][1]*decomps[n][c][1]+decomps[n][c][2]*decomps[n][c][2] == psd_scalar && A_seqns[iA][0] != 0)
 				continue;
 			if(decomps[n][c][0]*decomps[n][c][0]+decomps[n][c][1]*decomps[n][c][1]+decomps[n][c][2]*decomps[n][c][2] == psd_scalar-2 && A_seqns[iA][0] == 0)
@@ -221,11 +221,11 @@ int main(int argc, char** argv) {
 
 			A_psds = A_psds_list[iA];
 
-			for(int iB = 0; iB < B_psds_list.size(); ++iB) {	
+			for (int iB = 0, b_len = B_psds_list.size(); iB < b_len; ++iB) {	
 				B_psds = B_psds_list[iB];
 
 				to_break = false;
-				for(int j=1; j<=n/2; ++j) {	
+				for (int j=1; j<=n/2; ++j) {	
 					AB_psds[j] = A_psds[j]+B_psds[j];
 					if(AB_psds[j] > psd_scalar+eps) {	
 						to_break = true;
@@ -247,10 +247,10 @@ int main(int argc, char** argv) {
 		sprintf(filename, pafs_filename, n, c, n, "CD");
 		pair_file = fopen(filename, "w");
 
-		for (int iC = 0; iC < C_psds_list.size(); ++iC) {	
+		for (int iC = 0, c_len = C_psds_list.size(); iC < c_len; ++iC) {	
 			C_psds = C_psds_list[iC];
 
-			for (int iD = 0; iD < D_psds_list.size(); ++iD) {	
+			for (int iD = 0, d_len = D_psds_list.size(); iD < d_len; ++iD) {	
 				D_psds = D_psds_list[iD];
 
 				to_break = false;

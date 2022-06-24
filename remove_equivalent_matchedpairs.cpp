@@ -9,15 +9,18 @@
 
 std::array<int, MAX_N> permute(int n, int k, std::array<int, MAX_N> M) {	
 	std::array<int, MAX_N> result = {};
-	for(int i = 0; i < n; ++i)
+	int_fast32_t i = 0;
+	do {
 		result[i] = M[(i * k) % n];
+		++i;
+	} while (i < n);
 	return result;
 }
 
 std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> minrep(int n, std::array<int, MAX_N> A, std::array<int, MAX_N> B, std::array<int, MAX_N> C, std::array<int, MAX_N> D) {	
 	std::set<std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>>> equivseqns;
 
-	for(int j = 0; j < coprimelist_len[n]; ++j) {	
+	for (int j = 0; j < coprimelist_len[n]; ++j) {	
 		int k = coprimelist[n][j];
 		std::array<int, MAX_N> permutedA = permute(n, k, A);
 		std::array<int, MAX_N> permutedB = permute(n, k, B);
