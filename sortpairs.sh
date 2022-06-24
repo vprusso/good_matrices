@@ -9,8 +9,6 @@ then
 fi
 export LC_ALL=C
 n=$1
-d=1
-l=$((n/d))
 echo "ORDER $n: Sort compression pairs"
 for c in `seq 0 4`
 do
@@ -18,21 +16,21 @@ do
 	then
 		continue
 	fi
- 	if [ -e matchings/$n.$c.$l.AB.pafs.txt ]
+ 	if [ -e matchings/$n.$c.$n.AB.pafs.txt ]
  	then
 	 	SECONDS=0
  		echo "ORDER $n: Sort compression $c: Sort pairs"
- 		sort -T tmp/ matchings/$n.$c.$l.AB.pafs.txt > matchings/$n.$c.$l.AB.pafs.sorted.txt
+ 		sort -S 50% --parallel=4 -T tmp/ matchings/$n.$c.$n.AB.pafs.txt > matchings/$n.$c.$n.AB.pafs.sorted.txt
 		DIFF=$SECONDS
  		printf "  Case $c: AB PAFs sorted in %.2f seconds\n" $DIFF
- 		echo $DIFF > timings/$n.$c.$l.AB.sorttime
+ 		echo $DIFF > timings/$n.$c.$n.AB.sorttime
  	fi
-	if [ -e matchings/$n.$c.$l.CD.pafs.txt ]
+	if [ -e matchings/$n.$c.$n.CD.pafs.txt ]
 	then
 		SECONDS=0
-		sort -T tmp/ matchings/$n.$c.$l.CD.pafs.txt > matchings/$n.$c.$l.CD.pafs.sorted.txt
+		sort -S 50% --parallel=4 -T tmp/ matchings/$n.$c.$n.CD.pafs.txt > matchings/$n.$c.$n.CD.pafs.sorted.txt
 		DIFF=$SECONDS
 		printf "  Case $c: CD PAFs sorted in %.2f seconds\n" $DIFF
-		echo $DIFF > timings/$n.$c.$l.CD.sorttime
+		echo $DIFF > timings/$n.$c.$n.CD.sorttime
 	fi
 done

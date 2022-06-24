@@ -13,7 +13,6 @@ matchedpairs/*
 matchedseqns/*
 matchings/*
 timings/*
-maplesat*
 
 .DS_Store
 

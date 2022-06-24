@@ -16,52 +16,51 @@ std::array<int, MAX_N> compress(int n, std::array<int, MAX_N> A) {
 	return result;
 }
 
-std::array<int, MAX_N> permuteA(int n, int k, std::array<int, MAX_N> A) {	
+std::array<int, MAX_N> permute(int n, int k, std::array<int, MAX_N> A) {	
 	std::array<int, MAX_N> result = {};
-	for(int i=0; i<n; ++i)
+	for (int i=0; i<n; ++i)
 		result[i] = A[(i*k)%n];
 	return result;
 }
 
 int paf(int n, int *A, int s) {	
 	int res = 0;
-	for(int i=0; i<n; ++i)
+	for (int i = 0; i < n; ++i)
 		res += A[i]*A[(i+s)%n];
 	return res;
 }
 
 void fprintseqn(FILE *f, int n, int *A) {	
-	for(int i=0; i<n; ++i)
+	for (int i = 0; i < n; ++i)
 		fprintf(f, "%d ", A[i]);
 	fprintf(f, "\n");
 }
 
 void fprintpafs(FILE *f, int n, int *A) {	
-	for(int i=0; i<=n/2; ++i)
+	for (int i = 0; i <= n/2; ++i)
 		fprintf(f, "%d ", paf(n, A, i));
 	fprintf(f, "\n");
 }
 
-double* fft_signal_A;
-fftw_complex* fft_result_A;
+double *fft_signal_A;
+fftw_complex *fft_result_A;
 fftw_plan plan_A;
 
-double* fft_signal_B;
-fftw_complex* fft_result_B;
+double *fft_signal_B;
+fftw_complex *fft_result_B;
 fftw_plan plan_B;
 
 int main(int argc, char** argv) {
-	if(argc==1)
+	if (argc == 1)
 		fprintf(stderr, "Need order of matchings to compute\n"), exit(0);
 
+	char filename[100];
 	const int n = atoi(argv[1]);
-
 	const char seqns_filename[] = "matchings/%d.%d.%d.%c.seqns.txt";
 	const char pafs_filename[] = "matchings/%d.%d.%d.%c.pafs.txt";
 
 	mkdir("matchings", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 	mkdir("timings", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-
 	printf("ORDER %d: Generate compression sequences\n", n);
 
 	fft_signal_A = (double*)malloc(sizeof(double)*n);
@@ -72,29 +71,28 @@ int main(int argc, char** argv) {
 	fft_result_B = (fftw_complex*)malloc(sizeof(fftw_complex)*n);
 	plan_B = fftw_plan_dft_r2c_1d(n, fft_signal_B, fft_result_B, FFTW_ESTIMATE);
 
-	FILE *Aseqnsfile, *Bseqnsfile[4], *Cseqnsfile[4], *Dseqnsfile[4];
-	FILE *Apafsfile,  *Bpafsfile[4],  *Cpafsfile[4],  *Dpafsfile[4];
+	FILE *A_seqns_file, *B_seqns_file[4], *C_seqns_file[4], *D_seqns_file[4];
+	FILE *A_pafs_file,  *B_pafs_file[4],  *C_pafs_file[4],  *D_pafs_file[4];
 	int Btarget[4], Ctarget[4], Dtarget[4];
 	
-	char filename[100];
 	sprintf(filename, seqns_filename, n, 0, n, 'A');
-	Aseqnsfile = fopen(filename, "w");
+	A_seqns_file = fopen(filename, "w");
 	sprintf(filename, pafs_filename, n, 0, n, 'A');
-	Apafsfile = fopen(filename, "w");
+	A_pafs_file = fopen(filename, "w");
 	
-	for(int c = 0; c < decomps_len[n]; ++c) {
+	for (int c = 0; c < decomps_len[n]; ++c) {
 		sprintf(filename, seqns_filename, n, c, n, 'B');
-		Bseqnsfile[c] = fopen(filename, "w");
+		B_seqns_file[c] = fopen(filename, "w");
 		sprintf(filename, seqns_filename, n, c, n, 'C');
-		Cseqnsfile[c] = fopen(filename, "w");
+		C_seqns_file[c] = fopen(filename, "w");
 		sprintf(filename, seqns_filename, n, c, n, 'D');
-		Dseqnsfile[c] = fopen(filename, "w");
+		D_seqns_file[c] = fopen(filename, "w");
 		sprintf(filename, pafs_filename, n, c, n, 'B');
-		Bpafsfile[c] = fopen(filename, "w");
+		B_pafs_file[c] = fopen(filename, "w");
 		sprintf(filename, pafs_filename, n, c, n, 'C');
-		Cpafsfile[c] = fopen(filename, "w");
+		C_pafs_file[c] = fopen(filename, "w");
 		sprintf(filename, pafs_filename, n, c, n, 'D');
-		Dpafsfile[c] = fopen(filename, "w");
+		D_pafs_file[c] = fopen(filename, "w");
 
 		Btarget[c] = decomps[n][c][1]*(decomps[n][c][1] % 4 == n % 4 ? 1 : -1);
 		Ctarget[c] = decomps[n][c][2]*(decomps[n][c][2] % 4 == n % 4 ? 1 : -1);
@@ -110,13 +108,13 @@ int main(int argc, char** argv) {
 	B[0] = 1;
 	fft_signal_A[0] = 1;
 	fft_signal_B[0] = 1;
-	for(int i=1; i<=n/2; ++i) {	
+	for (int i = 1; i <= n/2; ++i) {	
 		A[i] = -1;
 		B[i] = -1;
 		fft_signal_A[i] = A[i];
 		fft_signal_B[i] = B[i];
 	}
-	for(int i=n/2+1; i<n; ++i) {	
+	for (int i = n/2+1; i < n; ++i) {	
 		A[i] = 1;
 		B[i] = -1;
 		fft_signal_A[i] = A[i];
@@ -153,15 +151,15 @@ int main(int argc, char** argv) {
 				#if REMOVE_EQUIV_A
 				for(int j=0; j<coprimelist_len[n] && toadd_A==true; ++j) {	
 					const int k = coprimelist[n][j];
-					std::array<int, MAX_N> permutedcomp = permuteA(n, k, compressA);
+					std::array<int, MAX_N> permutedcomp = permute(n, k, compressA);
 					if(myset_A.count(permutedcomp)!=0)
 						toadd_A = false;
 				}
 				#endif
 				
 				if(toadd_A == true) {	
-					fprintseqn(Aseqnsfile, n, compressA.data());
-					fprintpafs(Apafsfile, n, compressA.data());
+					fprintseqn(A_seqns_file, n, compressA.data());
+					fprintpafs(A_pafs_file, n, compressA.data());
 					Acount++;
 				}
 				
@@ -179,26 +177,26 @@ int main(int argc, char** argv) {
 						#if REMOVE_EQUIV_B
 						for(int j=0; j<coprimelist_len[n] && toadd_B==true; ++j)
 						{	const int k = coprimelist[n][j];
-							std::array<int, MAX_N> permutedcomp = permuteA(l, k, compressB);
+							std::array<int, MAX_N> permutedcomp = permute(l, k, compressB);
 							if(myset_B.count(permutedcomp)!=0)
 								toadd_B = false;
 						}
 						#endif
 
 						if (toadd_B == true) {	
-							fprintseqn(Bseqnsfile[c], n, compressB.data());
-							fprintpafs(Bpafsfile[c], n, compressB.data());
+							fprintseqn(B_seqns_file[c], n, compressB.data());
+							fprintpafs(B_pafs_file[c], n, compressB.data());
 							Bcount[c]++;
 						}
 					}
 					if (rowsum == Ctarget[c]) {	
-						fprintseqn(Cseqnsfile[c], n, compressB.data());
-						fprintpafs(Cpafsfile[c], n, compressB.data());
+						fprintseqn(C_seqns_file[c], n, compressB.data());
+						fprintpafs(C_pafs_file[c], n, compressB.data());
 						Ccount[c]++;
 					}
 					if (rowsum == Dtarget[c]) {	
-						fprintseqn(Dseqnsfile[c], n, compressB.data());
-						fprintpafs(Dpafsfile[c], n, compressB.data());
+						fprintseqn(D_seqns_file[c], n, compressB.data());
+						fprintpafs(D_pafs_file[c], n, compressB.data());
 						Dcount[c]++;
 					}
 				}
@@ -244,16 +242,16 @@ int main(int argc, char** argv) {
 	for (int c = 0; c < decomps_len[n]; ++c)
 		printf("    Case (%d, %d, %d): %d As, %d Bs, %d Cs, %d Ds\n", Btarget[c], Ctarget[c], Dtarget[c], Acount, Bcount[c], Ccount[c], Dcount[c]);
 
-	fclose(Aseqnsfile);
-	fclose(Apafsfile);
+	fclose(A_seqns_file);
+	fclose(A_pafs_file);
 
 	for (int c = 0; c < decomps_len[n]; ++c) {	
-		fclose(Bseqnsfile[c]);
-		fclose(Cseqnsfile[c]);
-		fclose(Dseqnsfile[c]);
-		fclose(Bpafsfile[c]);
-		fclose(Cpafsfile[c]);
-		fclose(Dpafsfile[c]);
+		fclose(B_seqns_file[c]);
+		fclose(C_seqns_file[c]);
+		fclose(D_seqns_file[c]);
+		fclose(B_pafs_file[c]);
+		fclose(C_pafs_file[c]);
+		fclose(D_pafs_file[c]);
 	}
 
 	fftw_destroy_plan(plan_A);
