@@ -12,10 +12,6 @@ int main(int argc, char** argv) {
 
 	const int n = atoi(argv[1]);
 
-	int case_to_solve = -1;
-	if (argc > 2)
-		case_to_solve = atoi(argv[2]);
-
 	mkdir("matchedpairs", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
 	const char seqnsfilename[] = "matchings/%d.%d.%d.%s.seqns.txt";
@@ -34,8 +30,6 @@ int main(int argc, char** argv) {
 	file.close();
 
 	for (int c = 0; c < decomps_len[n]; ++c) {
-		if (case_to_solve != -1 && case_to_solve != c)
-			continue;
 
 		clock_t start = clock();
 
@@ -166,7 +160,7 @@ int main(int argc, char** argv) {
 		outfile.close();
 
 		sprintf(filename, "timings/%d.%d.%d.jointime", n, c, n);
-		FILE* f = fopen(filename, "w");
+		FILE *f = fopen(filename, "w");
 		fprintf(f, "%.2f\n", (clock() - start)/(float)CLOCKS_PER_SEC);
 		fclose(f);
 

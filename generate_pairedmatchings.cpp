@@ -7,7 +7,7 @@
 const int MAX_N = 70;
 const int HALF_MAX_N = 1+MAX_N/2;
 
-void fprintpair(FILE *f, int n, int* A, int iA, int iB) {	
+void fprintpair(FILE *f, int n, int *A, int iA, int iB) {	
 	for (int i=0; i < n; ++i)
 		fprintf(f, "%d ", A[i]);
 	fprintf(f, ": %d %d\n", iA, iB);
@@ -17,7 +17,6 @@ int main(int argc, char** argv) {
 	if (argc == 1)
 		fprintf(stderr, "Need order of paired matchings files to compute\n"), exit(0);
 
-	int case_to_solve = -1;
 	const int n = atoi(argv[1]);
 	const int pafslen = n/2+1;
 	const int psd_scalar = 4*n;
@@ -83,8 +82,6 @@ int main(int argc, char** argv) {
 	printf("  Computed A PSDs in %.2f seconds\n", (clock() - start)/(float)CLOCKS_PER_SEC);
 
 	for (int c = 0; c < decomps_len[n]; ++c) {
-		if (case_to_solve != c)
-			continue;
 			
 		std::vector<std::array<int, MAX_N>> B_seqns;
 		std::vector<std::array<int, MAX_N>> C_seqns;
@@ -210,7 +207,7 @@ int main(int argc, char** argv) {
 		std::array<double, HALF_MAX_N> D_psds = {};
 		std::array<double, HALF_MAX_N> CD_psds = {};
 
-		FILE* pair_file;
+		FILE *pair_file;
 		bool to_break;
 
 		sprintf(filename, pafs_filename, n, c, n, "AB");
@@ -281,7 +278,7 @@ int main(int argc, char** argv) {
 		fclose(pair_file);
 
 		sprintf(filename, "timings/%d.%d.%d.genpairtime", n, c, n);
-		FILE* f = fopen(filename, "w");
+		FILE *f = fopen(filename, "w");
 		fprintf(f, "%.2f\n", (clock() - start)/(float)CLOCKS_PER_SEC);
 		fclose(f);
 

@@ -32,45 +32,45 @@ std::array<int, MAX_N> permuteA(int n, int k, int s, const std::array<int, MAX_N
 	return result;
 }
 
-std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> minrep(int n, int l, const std::array<int, MAX_N> &A, const std::array<int, MAX_N> &B, const std::array<int, MAX_N> &C, const std::array<int, MAX_N> &D) {	
+std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> minrep(int n, const std::array<int, MAX_N> &A, const std::array<int, MAX_N> &B, const std::array<int, MAX_N> &C, const std::array<int, MAX_N> &D) {	
 	std::set<std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>>> equivseqns;
 
 	for (int j=0; j<coprimelist_len[n]; ++j) {	
 		int k = coprimelist[n][j];
-		std::array<int, MAX_N> permutedA = permuteA(l, k, 0, A);
-		std::array<int, MAX_N> permutedB = permuteA(l, k, 0, B);
-		std::array<int, MAX_N> permutedC = permuteA(l, k, 0, C);
-		std::array<int, MAX_N> permutedD = permuteA(l, k, 0, D);
+		std::array<int, MAX_N> permutedA = permuteA(n, k, 0, A);
+		std::array<int, MAX_N> permutedB = permuteA(n, k, 0, B);
+		std::array<int, MAX_N> permutedC = permuteA(n, k, 0, C);
+		std::array<int, MAX_N> permutedD = permuteA(n, k, 0, D);
 
 		if (permutedA[0]<0)
-			negateA(l, permutedA);
+			negateA(n, permutedA);
 
 		if (permutedB[0]<0)
-			negateA(l, permutedB);
+			negateA(n, permutedB);
 
 		if (permutedC[0]<0)
-			negateA(l, permutedC);
+			negateA(n, permutedC);
 
 		if (permutedD[0]<0)
-			negateA(l, permutedD);
+			negateA(n, permutedD);
 
 		if (n % 2 == 0) {	
-			std::array<int, MAX_N> altpermutedA = permuteA(l, 1, n/2, permutedA);
-			std::array<int, MAX_N> altpermutedB = permuteA(l, 1, n/2, permutedB);
-			std::array<int, MAX_N> altpermutedC = permuteA(l, 1, n/2, permutedC);
-			std::array<int, MAX_N> altpermutedD = permuteA(l, 1, n/2, permutedD);
+			std::array<int, MAX_N> altpermutedA = permuteA(n, 1, n/2, permutedA);
+			std::array<int, MAX_N> altpermutedB = permuteA(n, 1, n/2, permutedB);
+			std::array<int, MAX_N> altpermutedC = permuteA(n, 1, n/2, permutedC);
+			std::array<int, MAX_N> altpermutedD = permuteA(n, 1, n/2, permutedD);
 
 			if(altpermutedA[0]<0)
-				negateA(l, altpermutedA);
+				negateA(n, altpermutedA);
 
 			if(altpermutedB[0]<0)
-				negateA(l, altpermutedB);
+				negateA(n, altpermutedB);
 
 			if(altpermutedC[0]<0)
-				negateA(l, altpermutedC);
+				negateA(n, altpermutedC);
 
 			if(altpermutedD[0]<0)
-				negateA(l, altpermutedD);
+				negateA(n, altpermutedD);
 
 			if(permutedA < altpermutedA)
 				permutedA = altpermutedA;
@@ -98,8 +98,8 @@ std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N
 	return *(equivseqns.begin());
 }
 
-std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> minrep_full(int n, int l, std::array<int, MAX_N> &A, std::array<int, MAX_N> &B, std::array<int, MAX_N> &C, std::array<int, MAX_N> &D) {	
-	std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> rep1 = minrep(n, n, A, B, C, D);
+std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> minrep_full(int n, std::array<int, MAX_N> &A, std::array<int, MAX_N> &B, std::array<int, MAX_N> &C, std::array<int, MAX_N> &D) {	
+	std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> rep1 = minrep(n, A, B, C, D);
 	
 	if(n % 2 == 1)
 		return rep1;
@@ -109,21 +109,18 @@ std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N
 		altnegateA(n, C);
 		altnegateA(n, D);
 		
-		std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> rep2 = minrep(n, n, A, B, C, D);
+		std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> rep2 = minrep(n, A, B, C, D);
 
 		altnegateA(n, A);
 		altnegateA(n, B);
 		altnegateA(n, C);
 		altnegateA(n, D);
 		
-		if(rep1 < rep2)
-			return rep1;
-		else
-			return rep2;
+		return (rep1 < rep2) ? rep1 : rep2;
 	}
 }
 
-void fprintseqn(FILE* f, int n, const std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> &seqn) {	
+void fprintseqn(FILE *f, int n, const std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> &seqn) {	
 	std::array<int, MAX_N> A;
 	std::array<int, MAX_N> B;
 	std::array<int, MAX_N> C;
@@ -141,7 +138,7 @@ void fprintseqn(FILE* f, int n, const std::tuple<std::array<int, MAX_N>, std::ar
 	fprintf(f, "\n");
 }
 
-void fprettyprintseqn(FILE* f, int n, const std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> &seqn) {	
+void fprettyprintseqn(FILE *f, int n, const std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> &seqn) {	
 	std::array<int, MAX_N> A;
 	std::array<int, MAX_N> B;
 	std::array<int, MAX_N> C;
@@ -180,7 +177,7 @@ int main(int argc, char** argv) {
 
 	mkdir("timings", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
-	FILE* seqnsfile, * seqnsoutfile, * seqnsprettyoutfile;
+	FILE *seqnsfile, *seqnsoutfile, *seqnsprettyoutfile;
 
 	int invalidcount = 0;
 	
@@ -238,7 +235,7 @@ int main(int argc, char** argv) {
 				}
 			}
 
-			std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> repseqn = minrep_full(n, n, A, B, C, D);
+			std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> repseqn = minrep_full(n, A, B, C, D);
 
 			if(inequivseqns.count(repseqn)==0) {
 				inequivseqns.insert(repseqn);
@@ -260,7 +257,7 @@ int main(int argc, char** argv) {
 	fclose(seqnsoutfile);
 
 	sprintf(filename, "timings/%d.equivexhausttime", n);
-	FILE* f = fopen(filename, "w");
+	FILE *f = fopen(filename, "w");
 	fprintf(f, "%.2f\n", (clock() - start)/(float)CLOCKS_PER_SEC);
 	fclose(f);
 

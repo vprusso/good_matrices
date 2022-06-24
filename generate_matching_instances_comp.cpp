@@ -23,20 +23,20 @@ std::array<int, MAX_N> permuteA(int n, int k, std::array<int, MAX_N> A) {
 	return result;
 }
 
-int paf(int n, int* A, int s) {	
+int paf(int n, int *A, int s) {	
 	int res = 0;
 	for(int i=0; i<n; ++i)
 		res += A[i]*A[(i+s)%n];
 	return res;
 }
 
-void fprintseqn(FILE* f, int n, int* A) {	
+void fprintseqn(FILE *f, int n, int *A) {	
 	for(int i=0; i<n; ++i)
 		fprintf(f, "%d ", A[i]);
 	fprintf(f, "\n");
 }
 
-void fprintpafs(FILE* f, int n, int* A) {	
+void fprintpafs(FILE *f, int n, int *A) {	
 	for(int i=0; i<=n/2; ++i)
 		fprintf(f, "%d ", paf(n, A, i));
 	fprintf(f, "\n");
@@ -236,7 +236,7 @@ int main(int argc, char** argv) {
 	}
 
 	sprintf(filename, "timings/%d.%d.gencomptime", n, n);
-	FILE* f = fopen(filename, "w");
+	FILE *f = fopen(filename, "w");
 	fprintf(f, "%.2f\n", (clock() - start)/(float)CLOCKS_PER_SEC);
 	fclose(f);
 
