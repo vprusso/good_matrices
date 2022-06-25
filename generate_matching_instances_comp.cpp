@@ -145,62 +145,49 @@ int main(int argc, char** argv) {
 		}
 
 		if(!filtered_A) {	
-			std::array<int, MAX_N> compressA = compress(n, A);
-			if(myset_A.count(compressA)==0) {	
+			if(myset_A.count(A)==0) {	
 				bool toadd_A = true;
 				#if REMOVE_EQUIV_A
 				for (int j=0; j<coprimelist_len[n] && toadd_A==true; ++j) {	
 					const int k = coprimelist[n][j];
-					std::array<int, MAX_N> permutedcomp = permute(n, k, compressA);
+					std::array<int, MAX_N> permutedcomp = permute(n, k, A);
 					if(myset_A.count(permutedcomp)!=0)
 						toadd_A = false;
 				}
 				#endif
 				
 				if(toadd_A == true) {	
-					fprintseqn(A_seqns_file, n, compressA.data());
-					fprintpafs(A_pafs_file, n, compressA.data());
+					fprintseqn(A_seqns_file, n, A.data());
+					fprintpafs(A_pafs_file, n, A.data());
 					Acount++;
 				}
 				
-				myset_A.insert(compressA);
+				myset_A.insert(A);
 			}
 		}
 
 		if (!filtered_B) {
-			std::array<int, MAX_N> compressB = compress(n, B);
-			if (myset_B.count(compressB)==0) {
-				for (int c = 0; c < decomps_len[n]; ++c) {
+			for (int c = 0; c < decomps_len[n]; ++c) {
 
-					if(rowsum == Btarget[c]) {	
-						bool toadd_B = true;
-						#if REMOVE_EQUIV_B
-						for (int j=0; j<coprimelist_len[n] && toadd_B==true; ++j)
-						{	const int k = coprimelist[n][j];
-							std::array<int, MAX_N> permutedcomp = permute(l, k, compressB);
-							if(myset_B.count(permutedcomp)!=0)
-								toadd_B = false;
-						}
-						#endif
+				if(rowsum == Btarget[c]) {	
+					bool toadd_B = true;
 
-						if (toadd_B == true) {	
-							fprintseqn(B_seqns_file[c], n, compressB.data());
-							fprintpafs(B_pafs_file[c], n, compressB.data());
-							Bcount[c]++;
-						}
-					}
-					if (rowsum == Ctarget[c]) {	
-						fprintseqn(C_seqns_file[c], n, compressB.data());
-						fprintpafs(C_pafs_file[c], n, compressB.data());
-						Ccount[c]++;
-					}
-					if (rowsum == Dtarget[c]) {	
-						fprintseqn(D_seqns_file[c], n, compressB.data());
-						fprintpafs(D_pafs_file[c], n, compressB.data());
-						Dcount[c]++;
+					if (toadd_B == true) {	
+						fprintseqn(B_seqns_file[c], n, B.data());
+						fprintpafs(B_pafs_file[c], n, B.data());
+						Bcount[c]++;
 					}
 				}
-				myset_B.insert(compressB);
+				if (rowsum == Ctarget[c]) {	
+					fprintseqn(C_seqns_file[c], n, B.data());
+					fprintpafs(C_pafs_file[c], n, B.data());
+					Ccount[c]++;
+				}
+				if (rowsum == Dtarget[c]) {	
+					fprintseqn(D_seqns_file[c], n, B.data());
+					fprintpafs(D_pafs_file[c], n, B.data());
+					Dcount[c]++;
+				}
 			}
 		}
 

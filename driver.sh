@@ -16,7 +16,7 @@ else
 		exit
 	fi
 	make all
-	for n in `seq $1 6 $u`
+	for n in `seq $1 2 $u`
 	do
 		./generate_matching_instances_comp $n
 		./generate_pairedmatchings $n

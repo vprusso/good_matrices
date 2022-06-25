@@ -38,10 +38,10 @@ int main(int argc, char** argv) {
 
 	std::vector<std::array<int, MAX_N>> A_seqns;
 	std::vector<std::array<int, HALF_MAX_N>> A_pafs;
-	std::vector<std::array<double, HALF_MAX_N>> A_psds_list;
+	std::vector<std::array<float, HALF_MAX_N>> A_psds_list;
 	std::array<int, MAX_N> X = {};
 	std::array<int, HALF_MAX_N> P = {};
-	std::array<double, HALF_MAX_N> psds = {};
+	std::array<float, HALF_MAX_N> psds = {};
 
 	int in, i;
 
@@ -86,9 +86,9 @@ int main(int argc, char** argv) {
 		std::vector<std::array<int, MAX_N>> B_seqns;
 		std::vector<std::array<int, MAX_N>> C_seqns;
 		std::vector<std::array<int, MAX_N>> D_seqns;
-		std::vector<std::array<double, HALF_MAX_N>> B_psds_list;
-		std::vector<std::array<double, HALF_MAX_N>> C_psds_list;
-		std::vector<std::array<double, HALF_MAX_N>> D_psds_list;
+		std::vector<std::array<float, HALF_MAX_N>> B_psds_list;
+		std::vector<std::array<float, HALF_MAX_N>> C_psds_list;
+		std::vector<std::array<float, HALF_MAX_N>> D_psds_list;
 		std::vector<std::array<int, HALF_MAX_N>> B_pafs;
 		std::vector<std::array<int, HALF_MAX_N>> C_pafs;
 		std::vector<std::array<int, HALF_MAX_N>> D_pafs;
@@ -97,6 +97,9 @@ int main(int argc, char** argv) {
 		std::array<int, HALF_MAX_N> CD_pafs;
 
 		clock_t start = clock();
+		// TODO: 
+		// 1. split these up into PAF and Sequence some number of separate files (maybe the same number of cores to parallize).
+
 		sprintf(filename, seqns_filename, n, c, n, "B");
 		seqns_file = fopen(filename, "r");
 		i = 0;
@@ -200,12 +203,12 @@ int main(int argc, char** argv) {
 		long ABcount = 0;
 		long CD_count = 0;
 
-		std::array<double, HALF_MAX_N> A_psds = {};
-		std::array<double, HALF_MAX_N> B_psds = {};
-		std::array<double, HALF_MAX_N> AB_psds = {};
-		std::array<double, HALF_MAX_N> C_psds = {};
-		std::array<double, HALF_MAX_N> D_psds = {};
-		std::array<double, HALF_MAX_N> CD_psds = {};
+		std::array<float, HALF_MAX_N> A_psds = {};
+		std::array<float, HALF_MAX_N> B_psds = {};
+		std::array<float, HALF_MAX_N> AB_psds = {};
+		std::array<float, HALF_MAX_N> C_psds = {};
+		std::array<float, HALF_MAX_N> D_psds = {};
+		std::array<float, HALF_MAX_N> CD_psds = {};
 
 		FILE *pair_file;
 		bool to_break;
