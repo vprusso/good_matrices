@@ -7,7 +7,7 @@
 const int MAX_N = 70;
 const int HALF_MAX_N = 1+MAX_N/2;
 
-void fprintpair(FILE *f, int n, int *A, int iA, int iB) {	
+void fprintpair(FILE *f, int n, signed char *A, int iA, int iB) {	
 	for (int i=0; i < n; ++i)
 		fprintf(f, "%d ", A[i]);
 	fprintf(f, ": %d %d\n", iA, iB);
@@ -36,11 +36,11 @@ int main(int argc, char** argv) {
 	mkdir("timings", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 	printf("ORDER %d: Generate compression sequence pairs\n", n);
 
-	std::vector<std::array<int, MAX_N>> A_seqns;
-	std::vector<std::array<int, HALF_MAX_N>> A_pafs;
+	std::vector<std::array<signed char, MAX_N>> A_seqns;
+	std::vector<std::array<signed char, HALF_MAX_N>> A_pafs;
 	std::vector<std::array<float, HALF_MAX_N>> A_psds_list;
-	std::array<int, MAX_N> X = {};
-	std::array<int, HALF_MAX_N> P = {};
+	std::array<signed char, MAX_N> X = {};
+	std::array<signed char, HALF_MAX_N> P = {};
 	std::array<float, HALF_MAX_N> psds = {};
 
 	int in, i;
@@ -83,18 +83,18 @@ int main(int argc, char** argv) {
 
 	for (int c = 0; c < decomps_len[n]; ++c) {
 			
-		std::vector<std::array<int, MAX_N>> B_seqns;
-		std::vector<std::array<int, MAX_N>> C_seqns;
-		std::vector<std::array<int, MAX_N>> D_seqns;
+		std::vector<std::array<signed char, MAX_N>> B_seqns;
+		std::vector<std::array<signed char, MAX_N>> C_seqns;
+		std::vector<std::array<signed char, MAX_N>> D_seqns;
 		std::vector<std::array<float, HALF_MAX_N>> B_psds_list;
 		std::vector<std::array<float, HALF_MAX_N>> C_psds_list;
 		std::vector<std::array<float, HALF_MAX_N>> D_psds_list;
-		std::vector<std::array<int, HALF_MAX_N>> B_pafs;
-		std::vector<std::array<int, HALF_MAX_N>> C_pafs;
-		std::vector<std::array<int, HALF_MAX_N>> D_pafs;
+		std::vector<std::array<signed char, HALF_MAX_N>> B_pafs;
+		std::vector<std::array<signed char, HALF_MAX_N>> C_pafs;
+		std::vector<std::array<signed char, HALF_MAX_N>> D_pafs;
 
-		std::array<int, HALF_MAX_N> AB_pafs;
-		std::array<int, HALF_MAX_N> CD_pafs;
+		std::array<signed char, HALF_MAX_N> AB_pafs;
+		std::array<signed char, HALF_MAX_N> CD_pafs;
 
 		clock_t start = clock();
 		// TODO: 

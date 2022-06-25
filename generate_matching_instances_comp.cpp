@@ -6,37 +6,28 @@
 #include "coprimelist.h"
 
 #define MAX_N 70
-#define REMOVE_EQUIV_A 1
-#define REMOVE_EQUIV_B 0
 
-std::array<int, MAX_N> compress(int n, std::array<int, MAX_N> A) {	
-	std::array<int, MAX_N> result = {};
-	for (int i=0; i < n; ++i)
-		result[i % n] += A[i];
-	return result;
-}
-
-std::array<int, MAX_N> permute(int n, int k, std::array<int, MAX_N> A) {	
-	std::array<int, MAX_N> result = {};
+std::array<signed char, MAX_N> permute(int n, int k, std::array<signed char, MAX_N> A) {	
+	std::array<signed char, MAX_N> result = {};
 	for (int i=0; i<n; ++i)
 		result[i] = A[(i*k)%n];
 	return result;
 }
 
-int paf(int n, int *A, int s) {	
+int paf(int n, signed char *A, int s) {	
 	int res = 0;
 	for (int i = 0; i < n; ++i)
 		res += A[i]*A[(i+s)%n];
 	return res;
 }
 
-void fprintseqn(FILE *f, int n, int *A) {	
+void fprintseqn(FILE *f, int n, signed char *A) {	
 	for (int i = 0; i < n; ++i)
 		fprintf(f, "%d ", A[i]);
 	fprintf(f, "\n");
 }
 
-void fprintpafs(FILE *f, int n, int *A) {	
+void fprintpafs(FILE *f, int n, signed char *A) {	
 	for (int i = 0; i <= n/2; ++i)
 		fprintf(f, "%d ", paf(n, A, i));
 	fprintf(f, "\n");
@@ -102,8 +93,8 @@ int main(int argc, char** argv) {
 	clock_t start = clock();
 	int Acount = 0, Bcount[4] = {}, Ccount[4] = {}, Dcount[4] = {};
 
-	std::array<int, MAX_N> A = {};
-	std::array<int, MAX_N> B = {};
+	std::array<signed char, MAX_N> A = {};
+	std::array<signed char, MAX_N> B = {};
 	A[0] = 1;
 	B[0] = 1;
 	fft_signal_A[0] = 1;
@@ -123,8 +114,8 @@ int main(int argc, char** argv) {
 
 	int rowsum = -n+2;
 
-	std::set<std::array<int, MAX_N>> myset_A;
-	std::set<std::array<int, MAX_N>> myset_B;
+	std::set<std::array<signed char, MAX_N>> myset_A;
+	std::set<std::array<signed char, MAX_N>> myset_B;
 
 	while(1) {	
 		bool filtered_A = false;
@@ -147,14 +138,12 @@ int main(int argc, char** argv) {
 		if(!filtered_A) {	
 			if(myset_A.count(A)==0) {	
 				bool toadd_A = true;
-				#if REMOVE_EQUIV_A
 				for (int j=0; j<coprimelist_len[n] && toadd_A==true; ++j) {	
 					const int k = coprimelist[n][j];
-					std::array<int, MAX_N> permutedcomp = permute(n, k, A);
+					std::array<signed char, MAX_N> permutedcomp = permute(n, k, A);
 					if(myset_A.count(permutedcomp)!=0)
 						toadd_A = false;
 				}
-				#endif
 				
 				if(toadd_A == true) {	
 					fprintseqn(A_seqns_file, n, A.data());
@@ -170,13 +159,9 @@ int main(int argc, char** argv) {
 			for (int c = 0; c < decomps_len[n]; ++c) {
 
 				if(rowsum == Btarget[c]) {	
-					bool toadd_B = true;
-
-					if (toadd_B == true) {	
-						fprintseqn(B_seqns_file[c], n, B.data());
-						fprintpafs(B_pafs_file[c], n, B.data());
-						Bcount[c]++;
-					}
+					fprintseqn(B_seqns_file[c], n, B.data());
+					fprintpafs(B_pafs_file[c], n, B.data());
+					Bcount[c]++;
 				}
 				if (rowsum == Ctarget[c]) {	
 					fprintseqn(C_seqns_file[c], n, B.data());

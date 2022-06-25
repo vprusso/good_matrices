@@ -7,8 +7,8 @@
 
 #define MAX_N 70
 
-std::array<int, MAX_N> permute(int n, int k, std::array<int, MAX_N> M) {	
-	std::array<int, MAX_N> result = {};
+std::array<signed char, MAX_N> permute(int n, int k, std::array<signed char, MAX_N> M) {	
+	std::array<signed char, MAX_N> result = {};
 	int_fast32_t i = 0;
 	do {
 		result[i] = M[(i * k) % n];
@@ -17,15 +17,15 @@ std::array<int, MAX_N> permute(int n, int k, std::array<int, MAX_N> M) {
 	return result;
 }
 
-std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> minrep(int n, std::array<int, MAX_N> A, std::array<int, MAX_N> B, std::array<int, MAX_N> C, std::array<int, MAX_N> D) {	
-	std::set<std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>>> equivseqns;
+std::tuple<std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>> minrep(int n, std::array<signed char, MAX_N> A, std::array<signed char, MAX_N> B, std::array<signed char, MAX_N> C, std::array<signed char, MAX_N> D) {	
+	std::set<std::tuple<std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>>> equivseqns;
 
 	for (int j = 0; j < coprimelist_len[n]; ++j) {	
 		int k = coprimelist[n][j];
-		std::array<int, MAX_N> permutedA = permute(n, k, A);
-		std::array<int, MAX_N> permutedB = permute(n, k, B);
-		std::array<int, MAX_N> permutedC = permute(n, k, C);
-		std::array<int, MAX_N> permutedD = permute(n, k, D);
+		std::array<signed char, MAX_N> permutedA = permute(n, k, A);
+		std::array<signed char, MAX_N> permutedB = permute(n, k, B);
+		std::array<signed char, MAX_N> permutedC = permute(n, k, C);
+		std::array<signed char, MAX_N> permutedD = permute(n, k, D);
 
 		if(permutedC > permutedD)
 			std::swap(permutedC, permutedD);
@@ -39,11 +39,11 @@ std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N
 	return *(equivseqns.begin());
 }
 
-void fprintseqn(FILE *f, int n, std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> seqn) {	
-	std::array<int, MAX_N> A;
-	std::array<int, MAX_N> B;
-	std::array<int, MAX_N> C;
-	std::array<int, MAX_N> D;
+void fprintseqn(FILE *f, int n, std::tuple<std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>> seqn) {	
+	std::array<signed char, MAX_N> A;
+	std::array<signed char, MAX_N> B;
+	std::array<signed char, MAX_N> C;
+	std::array<signed char, MAX_N> D;
 	std::tie(A, B, C, D) = seqn;
 
 	for (int i = 0; i < n; ++i)
@@ -80,11 +80,11 @@ int main(int argc, char **argv) {
 		clock_t start = clock();
 		int in, total_count = 0, inequiv_count = 0;
 
-		std::set<std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>>> inequiv_seqns;
-		std::array<int, MAX_N> A = {};
-		std::array<int, MAX_N> B = {};
-		std::array<int, MAX_N> C = {};
-		std::array<int, MAX_N> D = {};
+		std::set<std::tuple<std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>>> inequiv_seqns;
+		std::array<signed char, MAX_N> A = {};
+		std::array<signed char, MAX_N> B = {};
+		std::array<signed char, MAX_N> C = {};
+		std::array<signed char, MAX_N> D = {};
 
 		sprintf(filename, seqns_filename, n, c, n);
 		seqns_file = fopen(filename, "r");
@@ -109,7 +109,7 @@ int main(int argc, char **argv) {
 				D[i] = in;
 			}
 
-			std::tuple<std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>, std::array<int, MAX_N>> rep_seqn = minrep(n, A, B, C, D);
+			std::tuple<std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>> rep_seqn = minrep(n, A, B, C, D);
 			if (inequiv_seqns.count(rep_seqn) == 0) {	
 				inequiv_seqns.insert(rep_seqn);
 				fprintseqn(seqns_out_file, n, make_tuple(A, B, C, D));
