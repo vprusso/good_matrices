@@ -5,15 +5,15 @@
 #include "coprimelist.h"
 #include "decomps.h"
 
-#define MAX_N 70
+#define MAX_N 55
 
 std::array<signed char, MAX_N> permute(int n, int k, std::array<signed char, MAX_N> M) {	
 	std::array<signed char, MAX_N> result = {};
-	int_fast32_t i = 0;
+	int i = n-1;
 	do {
 		result[i] = M[(i * k) % n];
-		++i;
-	} while (i < n);
+		--i;
+	} while (i >= 0);
 	return result;
 }
 
@@ -63,7 +63,7 @@ int main(int argc, char **argv) {
 
 	const int n = atoi(argv[1]);
 	int result;
-	char filename[100];
+	char filename[50];
 	const char seqns_filename[] = "matchedpairs/%d.%d.%d";
 	const char seqns_out_filename[] = "matchedseqns/%d.%d.%d.inequiv";
 

@@ -5,7 +5,7 @@
 #include "decomps.h"
 
 int main(int argc, char** argv) {
-	char filename[100];
+	char filename[50];
 
 	if (argc == 1)
 		std::cerr << "Need order of paired PAF matching files to join\n", exit(0);

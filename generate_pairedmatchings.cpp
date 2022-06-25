@@ -4,8 +4,8 @@
 #include <vector>
 #include "decomps.h"
 
-const int MAX_N = 70;
-const int HALF_MAX_N = 1+MAX_N/2;
+#define MAX_N 55
+#define HALF_MAX_N 1+MAX_N/2
 
 void fprintpair(FILE *f, int n, signed char *A, int iA, int iB) {	
 	for (int i=0; i < n; ++i)
@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
 	fftw_complex *fft_result = (fftw_complex*)malloc(sizeof(fftw_complex)*n);
 	fftw_plan plan = fftw_plan_dft_r2c_1d(n, fft_signal, fft_result, FFTW_ESTIMATE);
 
-	char filename[100];
+	char filename[50];
 	FILE *seqns_file;
 	FILE *pafs_file;
 

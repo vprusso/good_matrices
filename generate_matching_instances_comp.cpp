@@ -5,19 +5,25 @@
 #include "decomps.h"
 #include "coprimelist.h"
 
-#define MAX_N 70
+#define MAX_N 55
 
-std::array<signed char, MAX_N> permute(int n, int k, std::array<signed char, MAX_N> A) {	
+std::array<signed char, MAX_N> permute(int n, int k, std::array<signed char, MAX_N> M) {	
 	std::array<signed char, MAX_N> result = {};
-	for (int i=0; i<n; ++i)
-		result[i] = A[(i*k)%n];
+	int i = n-1;
+	do {
+		result[i] = M[(i * k) % n];
+		--i;
+	} while (i >= 0);
 	return result;
 }
 
 int paf(int n, signed char *A, int s) {	
 	int res = 0;
-	for (int i = 0; i < n; ++i)
+	int i = n-1;
+	do {
 		res += A[i]*A[(i+s)%n];
+		--i;
+	} while (i >= 0);
 	return res;
 }
 
@@ -45,7 +51,7 @@ int main(int argc, char** argv) {
 	if (argc == 1)
 		fprintf(stderr, "Need order of matchings to compute\n"), exit(0);
 
-	char filename[100];
+	char filename[50];
 	const int n = atoi(argv[1]);
 	const char seqns_filename[] = "matchings/%d.%d.%d.%c.seqns.txt";
 	const char pafs_filename[] = "matchings/%d.%d.%d.%c.pafs.txt";
