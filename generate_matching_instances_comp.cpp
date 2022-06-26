@@ -1,7 +1,7 @@
+#include <fftw3.h>
+#include <sys/stat.h>
 #include <array>
 #include <set>
-#include <fftw3.h
-#include <sys/stat.h>
 #include "decomps.h"
 #include "coprimelist.h"
 #include "constants.h"
