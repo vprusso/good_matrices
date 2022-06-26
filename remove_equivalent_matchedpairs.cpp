@@ -1,21 +1,11 @@
 #include <tuple>
 #include <array>
 #include <set>
-#include <sys/stat.h>
+#include "constants.h"
 #include "coprimelist.h"
 #include "decomps.h"
+#include "utils.h"
 
-#define MAX_N 55
-
-std::array<signed char, MAX_N> permute(int n, int k, std::array<signed char, MAX_N> M) {	
-	std::array<signed char, MAX_N> result = {};
-	int i = n-1;
-	do {
-		result[i] = M[(i * k) % n];
-		--i;
-	} while (i >= 0);
-	return result;
-}
 
 std::tuple<std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>> minrep(int n, std::array<signed char, MAX_N> A, std::array<signed char, MAX_N> B, std::array<signed char, MAX_N> C, std::array<signed char, MAX_N> D) {	
 	std::set<std::tuple<std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>>> equivseqns;
@@ -63,12 +53,10 @@ int main(int argc, char **argv) {
 
 	const int n = atoi(argv[1]);
 	int result;
-	char filename[50];
+	char filename[100];
 	const char seqns_filename[] = "matchedpairs/%d.%d.%d";
 	const char seqns_out_filename[] = "matchedseqns/%d.%d.%d.inequiv";
 
-	mkdir("timings", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	mkdir("matchedseqns", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 	printf("ORDER %d: Remove equivalent matched compressions\n", n);
 	
 	FILE *seqns_file, *seqns_out_file;

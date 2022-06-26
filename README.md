@@ -17,6 +17,8 @@ On Debian/Ubuntu:
 sudo apt-get install libfftw3-dev
 ```
 
+If on a ComputeCanada instance, this would be invoked by `module load fftw`.
+
 You must have the `coreutils` package installed. 
 
 On OSX, you can install this package via `brew` as such:
@@ -32,7 +34,21 @@ On Debian/Ubuntu:
 sudo apt-get install -y make
 ```
 
+Python 3.9+ is required along with the `poetry` program. To install a virtual
+environment with the package along with all dependencies installed, one may run
+the following command:
+
+```
+poetry install
+```
+
+To invoke the virtual environment in the shell, one may run:
+
+```
+poetry shell
+```
+
 ## Run
 
-Run `./driver 3`
+After invoking the `poetry` shell, run `python main -d 3`
 

@@ -1,16 +1,13 @@
 #include <fstream>
-#include <iostream>
 #include <vector>
-#include <sys/stat.h>
 #include "decomps.h"
 
+
 int main(int argc, char** argv) {
-	char filename[50];
+	char filename[100];
 
 	if (argc == 1)
-		std::cerr << "Need order of paired PAF matching files to join\n", exit(0);
-
-	mkdir("matchedpairs", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		fprintf(stderr, "Need order of paired PAF matching files to join\n"), exit(0);
 
 	const int n = atoi(argv[1]);
 	const char seqns_filename[] = "matchings/%d.%d.%d.%s.seqns.txt";

@@ -1,20 +1,19 @@
-#include <fftw3.h>
-#include <sys/stat.h>
 #include <array>
 #include <set>
+#include <fftw3.h
+#include <sys/stat.h>
 #include "decomps.h"
 #include "coprimelist.h"
+#include "constants.h"
+#include "utils.h"
 
-#define MAX_N 55
 
-std::array<signed char, MAX_N> permute(int n, int k, std::array<signed char, MAX_N> M) {	
-	std::array<signed char, MAX_N> result = {};
-	int i = n-1;
-	do {
-		result[i] = M[(i * k) % n];
-		--i;
-	} while (i >= 0);
-	return result;
+void make_dirs() {
+	/* Make all directories for file output. */
+	mkdir("matchings", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+	mkdir("timings", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+	mkdir("matchedpairs", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+	mkdir("matchedseqns", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 }
 
 int paf(int n, signed char *A, int s) {	
@@ -51,13 +50,13 @@ int main(int argc, char** argv) {
 	if (argc == 1)
 		fprintf(stderr, "Need order of matchings to compute\n"), exit(0);
 
-	char filename[50];
+	char filename[100];
 	const int n = atoi(argv[1]);
 	const char seqns_filename[] = "matchings/%d.%d.%d.%c.seqns.txt";
 	const char pafs_filename[] = "matchings/%d.%d.%d.%c.pafs.txt";
 
-	mkdir("matchings", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	mkdir("timings", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+	make_dirs();
+
 	printf("ORDER %d: Generate compression sequences\n", n);
 
 	fft_signal_A = (double*)malloc(sizeof(double)*n);
