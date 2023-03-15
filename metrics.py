@@ -19,7 +19,7 @@ def get_dir_size(path="."):
                 total += get_dir_size(entry.path)
     return total
 
-odd_nums = [53]
+odd_nums = [27, 29, 31, 33, 35]
 fle = Path("metrics.txt")
 fle.touch(exist_ok=True)
 

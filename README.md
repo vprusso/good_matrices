@@ -50,5 +50,5 @@ poetry shell
 
 ## Run
 
-After invoking the `poetry` shell, run `python main -d 3`
+After invoking the `poetry` shell, run `python main -d 5`
 

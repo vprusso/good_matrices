@@ -5,14 +5,14 @@ description = ""
 authors = ["vprusso <vincentrusso1@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.11"
+python = "^3.9"
 numpy = "^1.21"
 scipy = "^1.8.0"
 matplotlib = "^3.5.1"
 colorama = "^0.4.4"
 joblib = "^1.1.0"
 tqdm = "^4.62.3"
-numba = "^0.55.1"
+#numba = "^0.55.1"
 seaborn = "^0.11.2"
 networkx = "^2.7.1"
 
