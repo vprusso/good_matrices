@@ -5,7 +5,7 @@ bin/generate_matching_instances_comp_%: generate_matching_instances_comp.cpp dec
 	$(COMP) generate_matching_instances_comp.cpp -O3 -std=c++0x -lfftw3 -o $@ -DMAX_N=$*
 bin/generate_pairedmatchings_%: generate_pairedmatchings.cpp decomps.h constants.h
 	$(COMP) generate_pairedmatchings.cpp -O3 -std=c++0x -lfftw3 -o $@ -DMAX_N=$*
-bin/join_pairedmatchings_%: join_pairedmatchings.cpp decomps.h
+bin/join_pairedmatchings_%: join_pairedmatchings.cpp decomps.h constants.h
 	$(COMP) join_pairedmatchings.cpp -O3 -std=c++0x -o $@ -DMAX_N=$*
 bin/remove_equivalent_matchedpairs_%: remove_equivalent_matchedpairs.cpp decomps.h coprimelist.h constants.h utils.h
 	$(COMP) remove_equivalent_matchedpairs.cpp -O3 -std=c++0x -o $@ -DMAX_N=$*
