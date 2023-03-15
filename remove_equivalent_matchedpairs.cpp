@@ -7,15 +7,15 @@
 #include "utils.h"
 
 
-std::tuple<std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>> minrep(int n, std::array<signed char, MAX_N> A, std::array<signed char, MAX_N> B, std::array<signed char, MAX_N> C, std::array<signed char, MAX_N> D) {	
+std::tuple<std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>> minrep(std::array<signed char, MAX_N> A, std::array<signed char, MAX_N> B, std::array<signed char, MAX_N> C, std::array<signed char, MAX_N> D) {	
 	std::set<std::tuple<std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>>> equivseqns;
 
 	for (int j = 0; j < coprimelist_len[n]; ++j) {	
 		int k = coprimelist[n][j];
-		std::array<signed char, MAX_N> permutedA = permute(n, k, A);
-		std::array<signed char, MAX_N> permutedB = permute(n, k, B);
-		std::array<signed char, MAX_N> permutedC = permute(n, k, C);
-		std::array<signed char, MAX_N> permutedD = permute(n, k, D);
+		std::array<signed char, MAX_N> permutedA = permute(k, A);
+		std::array<signed char, MAX_N> permutedB = permute(k, B);
+		std::array<signed char, MAX_N> permutedC = permute(k, C);
+		std::array<signed char, MAX_N> permutedD = permute(k, D);
 
 		if(permutedC > permutedD)
 			std::swap(permutedC, permutedD);
@@ -29,7 +29,7 @@ std::tuple<std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::
 	return *(equivseqns.begin());
 }
 
-void fprintseqn(FILE *f, int n, std::tuple<std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>> seqn) {	
+void fprintseqn(FILE *f, std::tuple<std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>> seqn) {	
 	std::array<signed char, MAX_N> A;
 	std::array<signed char, MAX_N> B;
 	std::array<signed char, MAX_N> C;
@@ -48,10 +48,6 @@ void fprintseqn(FILE *f, int n, std::tuple<std::array<signed char, MAX_N>, std::
 }
 
 int main(int argc, char **argv) {
-	if (argc == 1)
-		fprintf(stderr, "Need order of matched files to remove equivalences from\n"), exit(0);
-
-	const int n = atoi(argv[1]);
 	int result;
 	char filename[100];
 	const char seqns_filename[] = "matchedpairs/%d.%d.%d";
@@ -97,10 +93,10 @@ int main(int argc, char **argv) {
 				D[i] = in;
 			}
 
-			std::tuple<std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>> rep_seqn = minrep(n, A, B, C, D);
+			std::tuple<std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>> rep_seqn = minrep(A, B, C, D);
 			if (inequiv_seqns.count(rep_seqn) == 0) {	
 				inequiv_seqns.insert(rep_seqn);
-				fprintseqn(seqns_out_file, n, make_tuple(A, B, C, D));
+				fprintseqn(seqns_out_file, make_tuple(A, B, C, D));
 				inequiv_count++;
 			}
 			total_count++;

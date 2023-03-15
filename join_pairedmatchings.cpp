@@ -1,15 +1,11 @@
 #include <fstream>
 #include <vector>
 #include "decomps.h"
+#include "constants.h"
 
 
 int main(int argc, char** argv) {
 	char filename[100];
-
-	if (argc == 1)
-		fprintf(stderr, "Need order of paired PAF matching files to join\n"), exit(0);
-
-	const int n = atoi(argv[1]);
 	const char seqns_filename[] = "matchings/%d.%d.%d.%s.seqns.txt";
 	const char pafsfilename[] = "matchings/%d.%d.%d.%s.pafs.sorted.txt";
 	const char matchedfilename[] = "matchedpairs/%d.%d.%d";

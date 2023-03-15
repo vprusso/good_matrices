@@ -19,10 +19,10 @@ else
 	for n in `seq $1 2 $u`
 	do
 		make bin/generate_matching_instances_comp_$n bin/generate_pairedmatchings_$n bin/join_pairedmatchings_$n bin/remove_equivalent_matchedpairs_$n
-		bin/generate_matching_instances_comp_$n $n
-		bin/generate_pairedmatchings_$n $n
+		bin/generate_matching_instances_comp_$n
+		bin/generate_pairedmatchings_$n
 		./sortpairs.sh $n
-		bin/join_pairedmatchings_$n $n
-		bin/remove_equivalent_matchedpairs_$n $n
+		bin/join_pairedmatchings_$n
+		bin/remove_equivalent_matchedpairs_$n
 	done
 fi

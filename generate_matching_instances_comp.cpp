@@ -16,7 +16,7 @@ void make_dirs() {
 	mkdir("matchedseqns", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 }
 
-int paf(int n, signed char *A, int s) {	
+int paf(signed char *A, int s) {
 	int res = 0;
 	int i = n-1;
 	do {
@@ -26,15 +26,15 @@ int paf(int n, signed char *A, int s) {
 	return res;
 }
 
-void fprintseqn(FILE *f, int n, signed char *A) {	
+void fprintseqn(FILE *f, signed char *A) {
 	for (int i = 0; i < n; ++i)
 		fprintf(f, "%d ", A[i]);
 	fprintf(f, "\n");
 }
 
-void fprintpafs(FILE *f, int n, signed char *A) {	
+void fprintpafs(FILE *f, signed char *A) {
 	for (int i = 0; i <= n/2; ++i)
-		fprintf(f, "%d ", paf(n, A, i));
+		fprintf(f, "%d ", paf(A, i));
 	fprintf(f, "\n");
 }
 
@@ -47,11 +47,7 @@ fftw_complex *fft_result_B;
 fftw_plan plan_B;
 
 int main(int argc, char** argv) {
-	if (argc == 1)
-		fprintf(stderr, "Need order of matchings to compute\n"), exit(0);
-
 	char filename[100];
-	const int n = atoi(argv[1]);
 	const char seqns_filename[] = "matchings/%d.%d.%d.%c.seqns.txt";
 	const char pafs_filename[] = "matchings/%d.%d.%d.%c.pafs.txt";
 
@@ -145,14 +141,14 @@ int main(int argc, char** argv) {
 				bool toadd_A = true;
 				for (int j=0; j<coprimelist_len[n] && toadd_A==true; ++j) {	
 					const int k = coprimelist[n][j];
-					std::array<signed char, MAX_N> permutedcomp = permute(n, k, A);
+					std::array<signed char, MAX_N> permutedcomp = permute(k, A);
 					if(myset_A.count(permutedcomp)!=0)
 						toadd_A = false;
 				}
 				
 				if(toadd_A == true) {	
-					fprintseqn(A_seqns_file, n, A.data());
-					fprintpafs(A_pafs_file, n, A.data());
+					fprintseqn(A_seqns_file, A.data());
+					fprintpafs(A_pafs_file, A.data());
 					Acount++;
 				}
 				
@@ -164,18 +160,18 @@ int main(int argc, char** argv) {
 			for (int c = 0; c < decomps_len[n]; ++c) {
 
 				if(rowsum == Btarget[c]) {	
-					fprintseqn(B_seqns_file[c], n, B.data());
-					fprintpafs(B_pafs_file[c], n, B.data());
+					fprintseqn(B_seqns_file[c], B.data());
+					fprintpafs(B_pafs_file[c], B.data());
 					Bcount[c]++;
 				}
 				if (rowsum == Ctarget[c]) {	
-					fprintseqn(C_seqns_file[c], n, B.data());
-					fprintpafs(C_pafs_file[c], n, B.data());
+					fprintseqn(C_seqns_file[c], B.data());
+					fprintpafs(C_pafs_file[c], B.data());
 					Ccount[c]++;
 				}
 				if (rowsum == Dtarget[c]) {	
-					fprintseqn(D_seqns_file[c], n, B.data());
-					fprintpafs(D_pafs_file[c], n, B.data());
+					fprintseqn(D_seqns_file[c], B.data());
+					fprintpafs(D_pafs_file[c], B.data());
 					Dcount[c]++;
 				}
 			}

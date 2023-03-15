@@ -5,17 +5,13 @@
 #include "constants.h"
 
 
-void fprintpair(FILE *f, int n, signed char *A, int iA, int iB) {	
-	for (int i=0; i < n; ++i)
+void fprintpair(FILE *f, signed char *A, int iA, int iB) {	
+	for (int i=0; i < n/2+1; ++i)
 		fprintf(f, "%d ", A[i]);
 	fprintf(f, ": %d %d\n", iA, iB);
 }
 
 int main(int argc, char** argv) {
-	if (argc == 1)
-		fprintf(stderr, "Need order of paired matchings files to compute\n"), exit(0);
-
-	const int n = atoi(argv[1]);
 	const int pafslen = n/2+1;
 	const int psd_scalar = 4*n;
 	const float eps = 0.01;
@@ -238,7 +234,7 @@ int main(int argc, char** argv) {
 				for (int i = 0; i < pafslen; ++i)
 					AB_pafs[i] = A_pafs[iA][i] + B_pafs[iB][i];
 
-				fprintpair(pair_file, pafslen, AB_pafs.data(), iA, iB);
+				fprintpair(pair_file, AB_pafs.data(), iA, iB);
 				ABcount++;
 			}
 		}
@@ -270,7 +266,7 @@ int main(int argc, char** argv) {
 						CD_pafs[i] += psd_scalar;
 				}
 
-				fprintpair(pair_file, pafslen, CD_pafs.data(), iC, iD);
+				fprintpair(pair_file, CD_pafs.data(), iC, iD);
 				CD_count++;
 			}
 		}

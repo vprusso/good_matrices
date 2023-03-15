@@ -2,7 +2,7 @@
 #include "constants.h"
 
 
-std::array<signed char, MAX_N> permute(int n, int k, std::array<signed char, MAX_N> M) {	
+std::array<signed char, MAX_N> permute(int k, std::array<signed char, MAX_N> M) {	
 	std::array<signed char, MAX_N> result = {};
 	int i = n-1;
 	do {
