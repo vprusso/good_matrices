@@ -3,6 +3,8 @@
 #include <vector>
 #include "decomps.h"
 #include "constants.h"
+#include <cstdlib>
+#include <ctime>
 
 
 void fprintpair(FILE *f, signed char *A, int iA, int iB) {	

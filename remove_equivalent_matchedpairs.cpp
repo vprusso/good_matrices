@@ -5,6 +5,9 @@
 #include "coprimelist.h"
 #include "decomps.h"
 #include "utils.h"
+#include <cstdlib>
+#include <ctime>
+#include <cstdio>
 
 
 std::tuple<std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>> minrep(std::array<signed char, MAX_N> A, std::array<signed char, MAX_N> B, std::array<signed char, MAX_N> C, std::array<signed char, MAX_N> D) {	

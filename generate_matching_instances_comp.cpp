@@ -6,6 +6,8 @@
 #include "coprimelist.h"
 #include "constants.h"
 #include "utils.h"
+#include <cstdlib>
+#include <ctime>
 
 
 void make_dirs() {
