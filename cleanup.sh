@@ -1,7 +1,4 @@
-rm join_pairedmatchings
-rm generate_matching_instances_comp
-rm generate_pairedmatchings
-rm remove_equivalent_matchedpairs
+make clean
 rm -rf matchedpairs
 rm -rf matchedseqns
 rm -rf matchings

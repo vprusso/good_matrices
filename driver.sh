@@ -15,13 +15,14 @@ else
 		echo "Order must be odd"
 		exit
 	fi
-	make all
+	mkdir -p bin
 	for n in `seq $1 2 $u`
 	do
-		./generate_matching_instances_comp $n
-		./generate_pairedmatchings $n
+		make bin/generate_matching_instances_comp_$n bin/generate_pairedmatchings_$n bin/join_pairedmatchings_$n bin/remove_equivalent_matchedpairs_$n
+		bin/generate_matching_instances_comp_$n $n
+		bin/generate_pairedmatchings_$n $n
 		./sortpairs.sh $n
-		./join_pairedmatchings $n
-		./remove_equivalent_matchedpairs $n
+		bin/join_pairedmatchings_$n $n
+		bin/remove_equivalent_matchedpairs_$n $n
 	done
 fi
