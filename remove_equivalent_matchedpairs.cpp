@@ -1,13 +1,14 @@
 #include <tuple>
 #include <array>
 #include <set>
+#include <cstdlib>
+#include <ctime>
+#include <cstdio>
+#include <stdio.h>
 #include "constants.h"
 #include "coprimelist.h"
 #include "decomps.h"
 #include "utils.h"
-#include <cstdlib>
-#include <ctime>
-#include <cstdio>
 
 
 std::tuple<std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>, std::array<signed char, MAX_N>> minrep(std::array<signed char, MAX_N> A, std::array<signed char, MAX_N> B, std::array<signed char, MAX_N> C, std::array<signed char, MAX_N> D) {	
@@ -61,7 +62,7 @@ int main(int argc, char **argv) {
 	FILE *seqns_file, *seqns_out_file;
 
 	for (int c = 0; c < decomps_len[n]; ++c) {
-		sprintf(filename, seqns_out_filename, n, c, n);
+		snprintf(filename, sizeof(filename), seqns_out_filename, n, c, n);
 		seqns_out_file = fopen(filename, "w");
 
 		clock_t start = clock();
@@ -73,7 +74,7 @@ int main(int argc, char **argv) {
 		std::array<signed char, MAX_N> C = {};
 		std::array<signed char, MAX_N> D = {};
 
-		sprintf(filename, seqns_filename, n, c, n);
+		snprintf(filename, sizeof(filename), seqns_filename, n, c, n);
 		seqns_file = fopen(filename, "r");
 
 		while(fscanf(seqns_file, "%d ", &in) > 0) {	
@@ -106,7 +107,7 @@ int main(int argc, char **argv) {
 		}
 		fclose(seqns_file);
 
-		sprintf(filename, "timings/%d.%d.equivpairstime", n, c);
+		snprintf(filename, sizeof(filename), "timings/%d.%d.equivpairstime", n, c);
 		FILE *f = fopen(filename, "w");
 		fprintf(f, "%.2f\n", (clock() - start)/(float)CLOCKS_PER_SEC);
 		fclose(f);

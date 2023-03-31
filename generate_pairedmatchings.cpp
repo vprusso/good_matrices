@@ -1,10 +1,11 @@
 #include <fftw3.h>
 #include <array>
 #include <vector>
-#include "decomps.h"
-#include "constants.h"
 #include <cstdlib>
 #include <ctime>
+#include <stdio.h>
+#include "decomps.h"
+#include "constants.h"
 
 
 void fprintpair(FILE *f, signed char *A, int iA, int iB) {	
@@ -42,7 +43,7 @@ int main(int argc, char** argv) {
 
 	clock_t start = clock();
 
-	sprintf(filename, seqns_filename, n, 0, n, "A");
+	snprintf(filename, sizeof(filename), seqns_filename, n, 0, n, "A");
 	seqns_file = fopen(filename, "r");
 	i = 0;
 	while (fscanf(seqns_file, "%d ", &in) > 0) {	
@@ -62,7 +63,7 @@ int main(int argc, char** argv) {
 	}
 	fclose(seqns_file);
 
-	sprintf(filename, pafs_filename, n, 0, n, "A");
+	snprintf(filename, sizeof(filename), pafs_filename, n, 0, n, "A");
 	pafs_file = fopen(filename, "r");
 	i = 0;
 	while (fscanf(pafs_file, "%d ", &in) > 0) {	
@@ -95,7 +96,7 @@ int main(int argc, char** argv) {
 		// TODO: 
 		// 1. split these up into PAF and Sequence some number of separate files (maybe the same number of cores to parallize).
 
-		sprintf(filename, seqns_filename, n, c, n, "B");
+		snprintf(filename, sizeof(filename), seqns_filename, n, c, n, "B");
 		seqns_file = fopen(filename, "r");
 		i = 0;
 		while (fscanf(seqns_file, "%d ", &in)>0) {	
@@ -116,7 +117,7 @@ int main(int argc, char** argv) {
 		}
 		fclose(seqns_file);
 
-		sprintf(filename, pafs_filename, n, c, n, "B");
+		snprintf(filename, sizeof(filename), pafs_filename, n, c, n, "B");
 		pafs_file = fopen(filename, "r");
 		i = 0;
 		while (fscanf(pafs_file, "%d ", &in)>0) {	
@@ -129,7 +130,7 @@ int main(int argc, char** argv) {
 		}
 		fclose(pafs_file);
 
-		sprintf(filename, seqns_filename, n, c, n, "C");
+		snprintf(filename, sizeof(filename), seqns_filename, n, c, n, "C");
 		seqns_file = fopen(filename, "r");
 		i = 0;
 		while(fscanf(seqns_file, "%d ", &in) > 0) {	
@@ -149,7 +150,7 @@ int main(int argc, char** argv) {
 		}
 		fclose(seqns_file);
 
-		sprintf(filename, pafs_filename, n, c, n, "C");
+		snprintf(filename, sizeof(filename), pafs_filename, n, c, n, "C");
 		pafs_file = fopen(filename, "r");
 		i = 0;
 		while (fscanf(pafs_file, "%d ", &in) > 0) {	
@@ -162,7 +163,7 @@ int main(int argc, char** argv) {
 		}
 		fclose(pafs_file);
 
-		sprintf(filename, seqns_filename, n, c, n, "D");
+		snprintf(filename, sizeof(filename), seqns_filename, n, c, n, "D");
 		seqns_file = fopen(filename, "r");
 		i = 0;
 		while (fscanf(seqns_file, "%d ", &in)>0) {	
@@ -182,7 +183,7 @@ int main(int argc, char** argv) {
 		}
 		fclose(seqns_file);
 
-		sprintf(filename, pafs_filename, n, c, n, "D");
+		snprintf(filename, sizeof(filename), pafs_filename, n, c, n, "D");
 		pafs_file = fopen(filename, "r");
 		i = 0;
 		while(fscanf(pafs_file, "%d ", &in)>0) {	
@@ -208,7 +209,7 @@ int main(int argc, char** argv) {
 		FILE *pair_file;
 		bool to_break;
 
-		sprintf(filename, pafs_filename, n, c, n, "AB");
+		snprintf(filename, sizeof(filename), pafs_filename, n, c, n, "AB");
 		pair_file = fopen(filename, "w");
 
 		for (int iA = 0, a_len = A_psds_list.size(); iA < a_len; ++iA) {	
@@ -242,7 +243,7 @@ int main(int argc, char** argv) {
 		}
 		fclose(pair_file);
 
-		sprintf(filename, pafs_filename, n, c, n, "CD");
+		snprintf(filename, sizeof(filename), pafs_filename, n, c, n, "CD");
 		pair_file = fopen(filename, "w");
 
 		for (int iC = 0, c_len = C_psds_list.size(); iC < c_len; ++iC) {	
@@ -275,7 +276,7 @@ int main(int argc, char** argv) {
 
 		fclose(pair_file);
 
-		sprintf(filename, "timings/%d.%d.%d.genpairtime", n, c, n);
+		snprintf(filename, sizeof(filename), "timings/%d.%d.%d.genpairtime", n, c, n);
 		FILE *f = fopen(filename, "w");
 		fprintf(f, "%.2f\n", (clock() - start)/(float)CLOCKS_PER_SEC);
 		fclose(f);

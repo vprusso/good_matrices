@@ -2,12 +2,13 @@
 #include <sys/stat.h>
 #include <array>
 #include <set>
+#include <cstdlib>
+#include <ctime>
+#include <stdio.h>
 #include "decomps.h"
 #include "coprimelist.h"
 #include "constants.h"
 #include "utils.h"
-#include <cstdlib>
-#include <ctime>
 
 
 void make_dirs() {
@@ -69,23 +70,23 @@ int main(int argc, char** argv) {
 	FILE *A_pafs_file,  *B_pafs_file[4],  *C_pafs_file[4],  *D_pafs_file[4];
 	int Btarget[4], Ctarget[4], Dtarget[4];
 	
-	sprintf(filename, seqns_filename, n, 0, n, 'A');
+	snprintf(filename, sizeof(filename), seqns_filename, n, 0, n, 'A');
 	A_seqns_file = fopen(filename, "w");
-	sprintf(filename, pafs_filename, n, 0, n, 'A');
+	snprintf(filename, sizeof(filename), pafs_filename, n, 0, n, 'A');
 	A_pafs_file = fopen(filename, "w");
 	
 	for (int c = 0; c < decomps_len[n]; ++c) {
-		sprintf(filename, seqns_filename, n, c, n, 'B');
+		snprintf(filename, sizeof(filename), seqns_filename, n, c, n, 'B');
 		B_seqns_file[c] = fopen(filename, "w");
-		sprintf(filename, seqns_filename, n, c, n, 'C');
+		snprintf(filename, sizeof(filename), seqns_filename, n, c, n, 'C');
 		C_seqns_file[c] = fopen(filename, "w");
-		sprintf(filename, seqns_filename, n, c, n, 'D');
+		snprintf(filename, sizeof(filename), seqns_filename, n, c, n, 'D');
 		D_seqns_file[c] = fopen(filename, "w");
-		sprintf(filename, pafs_filename, n, c, n, 'B');
+		snprintf(filename, sizeof(filename), pafs_filename, n, c, n, 'B');
 		B_pafs_file[c] = fopen(filename, "w");
-		sprintf(filename, pafs_filename, n, c, n, 'C');
+		snprintf(filename, sizeof(filename), pafs_filename, n, c, n, 'C');
 		C_pafs_file[c] = fopen(filename, "w");
-		sprintf(filename, pafs_filename, n, c, n, 'D');
+		snprintf(filename, sizeof(filename), pafs_filename, n, c, n, 'D');
 		D_pafs_file[c] = fopen(filename, "w");
 
 		Btarget[c] = decomps[n][c][1]*(decomps[n][c][1] % 4 == n % 4 ? 1 : -1);
@@ -208,7 +209,7 @@ int main(int argc, char** argv) {
 			break;
 	}
 
-	sprintf(filename, "timings/%d.%d.gencomptime", n, n);
+	snprintf(filename, sizeof(filename), "timings/%d.%d.gencomptime", n, n);
 	FILE *f = fopen(filename, "w");
 	fprintf(f, "%.2f\n", (clock() - start)/(float)CLOCKS_PER_SEC);
 	fclose(f);

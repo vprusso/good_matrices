@@ -1,5 +1,6 @@
 #include <fstream>
 #include <vector>
+#include <stdio.h>
 #include "decomps.h"
 #include "constants.h"
 
@@ -15,7 +16,7 @@ int main(int argc, char** argv) {
 	std::ifstream file;
 	std::string str;
 	std::vector<std::string> Aseqns;
-	sprintf(filename, seqns_filename, n, 0, n, "A");
+	snprintf(filename, sizeof(filename), seqns_filename, n, 0, n, "A");
 	file.open(filename);
 	while (std::getline(file, str))
 		Aseqns.push_back(str);
@@ -28,19 +29,19 @@ int main(int argc, char** argv) {
 		std::vector<std::string> Bseqns, Cseqns, Dseqns, ABseqns, CDseqns;
 		std::ofstream outfile;
 
-		sprintf(filename, seqns_filename, n, c, n, "B");
+		snprintf(filename, sizeof(filename), seqns_filename, n, c, n, "B");
 		file.open(filename);
 		while(std::getline(file, str))
 			Bseqns.push_back(str);
 		file.close();
 
-		sprintf(filename, seqns_filename, n, c, n, "C");
+		snprintf(filename, sizeof(filename), seqns_filename, n, c, n, "C");
 		file.open(filename);
 		while(std::getline(file, str))
 			Cseqns.push_back(str);
 		file.close();
 
-		sprintf(filename, seqns_filename, n, c, n, "D");
+		snprintf(filename, sizeof(filename), seqns_filename, n, c, n, "D");
 		file.open(filename);
 		while(std::getline(file, str))
 			Dseqns.push_back(str);
@@ -49,9 +50,9 @@ int main(int argc, char** argv) {
 		std::string ABstr, CDstr;
 		std::ifstream ABfile, CDfile;
 
-		sprintf(filename, pafsfilename, n, c, n, "AB");
+		snprintf(filename, sizeof(filename), pafsfilename, n, c, n, "AB");
 		ABfile.open(filename);
-		sprintf(filename, pafsfilename, n, c, n, "CD");
+		snprintf(filename, sizeof(filename), pafsfilename, n, c, n, "CD");
 		CDfile.open(filename);
 
 		int colonind;
@@ -78,7 +79,7 @@ int main(int argc, char** argv) {
 		else
 			ABend = CDend = true;
 
-		sprintf(filename, matchedfilename, n, c, n);
+		snprintf(filename, sizeof(filename), matchedfilename, n, c, n);
 		outfile.open(filename);
 
 		while (!(ABend && CDend)) {	
@@ -150,7 +151,7 @@ int main(int argc, char** argv) {
 		CDfile.close();
 		outfile.close();
 
-		sprintf(filename, "timings/%d.%d.%d.jointime", n, c, n);
+		snprintf(filename, sizeof(filename), "timings/%d.%d.%d.jointime", n, c, n);
 		FILE *f = fopen(filename, "w");
 		fprintf(f, "%.2f\n", (clock() - start)/(float)CLOCKS_PER_SEC);
 		fclose(f);
